@@ -1,0 +1,149 @@
+.main-layout {
+  min-height: 100vh;
+}
+
+.layout-sider {
+  box-shadow: 2px 0 8px 0 rgba(29, 35, 41, 0.05);
+  z-index: 100;
+  position: relative;
+}
+
+.logo {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 16px;
+}
+
+.logo-icon {
+  font-size: 24px;
+  color: #1890ff;
+  margin-right: 8px;
+}
+
+.logo-text {
+  margin: 0 !important;
+  color: #1890ff;
+  font-weight: 600;
+}
+
+.layout-menu {
+  border-right: none;
+  height: calc(100vh - 80px);
+}
+
+.layout-menu .ant-menu-item {
+  margin: 4px 8px;
+  border-radius: 8px;
+  height: 40px;
+  line-height: 40px;
+}
+
+.layout-menu .ant-menu-item-selected {
+  background-color: #e6f7ff;
+  color: #1890ff;
+}
+
+.layout-menu .ant-menu-item:hover {
+  background-color: #f5f5f5;
+}
+
+.layout-header {
+  background: #fff;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  z-index: 99;
+  position: relative;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 16px;
+  cursor: pointer;
+  transition: color 0.3s;
+  border: none;
+  outline: none;
+}
+
+.trigger:hover {
+  color: #1890ff;
+  background-color: rgba(24, 144, 255, 0.1);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.welcome-text {
+  color: #666;
+  margin-right: 16px;
+  font-size: 14px;
+}
+
+.user-avatar {
+  background-color: #1890ff;
+  transition: all 0.3s;
+}
+
+.user-avatar:hover {
+  background-color: #40a9ff;
+  transform: scale(1.1);
+}
+
+.layout-content {
+  margin: 24px;
+  padding: 0;
+  min-height: calc(100vh - 112px);
+  background: #f0f2f5;
+  border-radius: 8px;
+}
+
+.content-wrapper {
+  padding: 24px;
+  background: #fff;
+  border-radius: 8px;
+  min-height: calc(100vh - 160px);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .layout-header {
+    padding: 0 16px;
+  }
+  
+  .layout-content {
+    margin: 16px;
+  }
+  
+  .content-wrapper {
+    padding: 16px;
+    min-height: calc(100vh - 144px);
+  }
+  
+  .welcome-text {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .layout-content {
+    margin: 8px;
+  }
+  
+  .content-wrapper {
+    padding: 12px;
+  }
+}

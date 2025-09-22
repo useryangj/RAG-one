@@ -1,0 +1,51 @@
+.upload-area {
+  border: 2px dashed #d9d9d9;
+  border-radius: 8px;
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  background-color: #fafafa;
+}
+
+.upload-area:hover {
+  border-color: #1890ff;
+  background-color: #f0f8ff;
+}
+
+.upload-area.drag-active {
+  border-color: #1890ff;
+  background-color: #e6f7ff;
+  transform: scale(1.02);
+}
+
+.upload-area.uploading {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upload-content h4 {
+  margin-bottom: 8px;
+  color: #262626;
+}
+
+.upload-content .ant-typography {
+  margin-bottom: 0;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .upload-area {
+    padding: 24px 16px;
+  }
+  
+  .upload-content h4 {
+    font-size: 16px;
+  }
+}

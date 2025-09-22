@@ -1,0 +1,88 @@
+spring:
+  application:
+    name: RAG-one
+  
+  # 数据库配置
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ragone
+    username: ${DB_USERNAME:ragone_user}
+    password: ${DB_PASSWORD:ragone_password}
+    driver-class-name: org.postgresql.Driver
+  
+  # JPA配置
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        # 启用向量扩展
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  
+  # 文件上传配置
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+      enabled: true
+
+# LangChain4j配置
+langchain4j:
+  open-ai:
+    chat-model:
+      # SiliconFlow API配置
+      api-key: ${SILICONFLOW_API_KEY:sk-lccjubwiwtvrfbtubsuqclecnhzalcbckwbpdrielsonkcgw}
+      base-url: https://api.siliconflow.cn/v1
+      model-name: ${LLM_MODEL:Qwen/Qwen2.5-7B-Instruct}
+      temperature: 0.7
+      max-tokens: 2000
+      timeout: 60s
+    
+    embedding-model:
+      api-key: ${SILICONFLOW_API_KEY:sk-lccjubwiwtvrfbtubsuqclecnhzalcbckwbpdrielsonkcgw}
+      base-url: https://api.siliconflow.cn/v1
+      model-name: ${EMBEDDING_MODEL:BAAI/bge-large-zh-v1.5}
+      timeout: 60s
+
+# JWT配置
+jwt:
+  secret: ${JWT_SECRET:mySecretKey123456789012345678901234567890}
+  expiration: 86400000 # 24小时
+
+# 应用配置
+app:
+  # 文件存储路径
+  file-storage-path: ${FILE_STORAGE_PATH:./uploads}
+  # 向量数据库配置
+  vector-store:
+    dimension: 1024 # 根据选择的embedding模型调整
+  
+# 服务器配置
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# 日志配置
+logging:
+  level:
+    com.example.ragone: DEBUG
+    dev.langchain4j: DEBUG
+    org.springframework.security: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/ragone.log
+
+# 管理端点配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
