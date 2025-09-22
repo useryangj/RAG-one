@@ -33,7 +33,7 @@ langchain4j:
   open-ai:
     chat-model:
       # SiliconFlow API配置
-      api-key: ${SILICONFLOW_API_KEY:sk-lccjubwiwtvrfbtubsuqclecnhzalcbckwbpdrielsonkcgw}
+      api-key: ${SILICONFLOW_API_KEY:}
       base-url: https://api.siliconflow.cn/v1
       model-name: ${LLM_MODEL:Qwen/Qwen2.5-7B-Instruct}
       temperature: 0.7
