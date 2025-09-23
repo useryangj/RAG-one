@@ -52,6 +52,12 @@ public class RagService {
     @Autowired
     private ObjectMapper objectMapper;
     
+    @Autowired
+    private HybridRetrievalService hybridRetrievalService;
+    
+    @Autowired
+    private RerankingService rerankingService;
+    
     @Value("${app.chat.cache.enabled:true}")
     private boolean cacheEnabled;
     
@@ -73,13 +79,26 @@ public class RagService {
                 conversationHistory = chatCacheService.getConversationHistory(sessionId);
             }
             
-            // 1. 将问题转换为向量
-            Embedding questionEmbedding = embeddingModel.embed(question).content();
-            String embeddingString = embeddingToString(questionEmbedding);
+            // 1. 使用混合检索搜索相关文档片段
+            List<DocumentChunk> relevantChunks;
+            if (hybridRetrievalService.isHybridEnabled()) {
+                // 使用混合检索（向量+关键词）
+                relevantChunks = hybridRetrievalService.hybridSearch(question, knowledgeBaseId);
+                logger.info("使用混合检索，找到 {} 个相关片段", relevantChunks.size());
+            } else {
+                // 使用传统向量检索
+                Embedding questionEmbedding = embeddingModel.embed(question).content();
+                String embeddingString = embeddingToString(questionEmbedding);
+                relevantChunks = documentChunkRepository.findSimilarChunks(
+                        knowledgeBaseId, embeddingString, 5);
+                logger.info("使用向量检索，找到 {} 个相关片段", relevantChunks.size());
+            }
             
-            // 2. 在知识库中搜索相关文档片段
-            List<DocumentChunk> relevantChunks = documentChunkRepository.findSimilarChunks(
-                    knowledgeBaseId, embeddingString, 5);
+            // 2. 对检索结果进行重排序（可选）
+            if (rerankingService.isRerankingEnabled()) {
+                relevantChunks = rerankingService.rerankResults(relevantChunks, question);
+                logger.info("重排序后保留 {} 个片段", relevantChunks.size());
+            }
             
             if (relevantChunks.isEmpty()) {
                 String response = "抱歉，在您的知识库中没有找到相关信息。";

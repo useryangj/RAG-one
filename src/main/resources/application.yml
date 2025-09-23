@@ -82,6 +82,28 @@ app:
       # 是否启用聊天历史缓存
       enabled: true
   
+  # 混合检索配置
+  hybrid-retrieval:
+    # 是否启用混合检索
+    enabled: true
+    # 向量检索权重
+    vector-weight: 0.7
+    # 关键词检索权重
+    keyword-weight: 0.3
+    # 最大检索结果数量
+    max-results: 10
+  
+  # 重排序配置
+  reranking:
+    # 是否启用重排序
+    enabled: false
+    # 重排序后最大结果数量
+    max-results: 5
+    # 多样性权重
+    diversity-weight: 0.1
+    # 相关性权重
+    relevance-weight: 0.9
+  
 # 服务器配置
 server:
   port: 8080

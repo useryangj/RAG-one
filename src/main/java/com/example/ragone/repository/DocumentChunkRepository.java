@@ -40,17 +40,17 @@ public interface DocumentChunkRepository extends JpaRepository<DocumentChunk, Lo
     /**
      * 旧版本查询方法（保留作为备用）
      */
-    @Query(value = """
-        SELECT dc.* FROM document_chunks dc
-        JOIN documents d ON dc.document_id = d.id
-        WHERE d.knowledge_base_id = :knowledgeBaseId
-        AND dc.embedding IS NOT NULL
-        ORDER BY dc.embedding <=> CAST(:queryEmbedding AS vector)
-        LIMIT :limit
-        """, nativeQuery = true)
-    List<DocumentChunk> findSimilarChunksWithJoin(@Param("knowledgeBaseId") Long knowledgeBaseId,
-                                                  @Param("queryEmbedding") String queryEmbedding,
-                                                  @Param("limit") int limit);
+    // @Query(value = """
+    //     SELECT dc.* FROM document_chunks dc
+    //     JOIN documents d ON dc.document_id = d.id
+    //     WHERE d.knowledge_base_id = :knowledgeBaseId
+    //     AND dc.embedding IS NOT NULL
+    //     ORDER BY dc.embedding <=> CAST(:queryEmbedding AS vector)
+    //     LIMIT :limit
+    //     """, nativeQuery = true)
+    // List<DocumentChunk> findSimilarChunksWithJoin(@Param("knowledgeBaseId") Long knowledgeBaseId,
+    //                                               @Param("queryEmbedding") String queryEmbedding,
+    //                                               @Param("limit") int limit);
     
     /**
      * 根据文档删除所有片段
@@ -61,6 +61,41 @@ public interface DocumentChunkRepository extends JpaRepository<DocumentChunk, Lo
      * 统计文档的片段数量
      */
     int countByDocument(Document document);
+    
+    /**
+     * 关键词全文搜索 - 使用PostgreSQL的全文搜索功能
+     */
+    @Query(value = """
+        SELECT dc.*, ts_rank(to_tsvector('simple', dc.content), plainto_tsquery('simple', :query)) as rank
+        FROM document_chunks dc
+        WHERE dc.knowledge_base_id = :knowledgeBaseId
+        AND to_tsvector('simple', dc.content) @@ plainto_tsquery('simple', :query)
+        ORDER BY rank DESC
+        LIMIT :limit
+        """, nativeQuery = true)
+    List<DocumentChunk> findByKeywordSearch(@Param("knowledgeBaseId") Long knowledgeBaseId,
+                                           @Param("query") String query,
+                                           @Param("limit") int limit);
+    
+    /**
+     * 关键词模糊搜索 - 使用LIKE操作符进行模糊匹配
+     */
+    @Query(value = """
+        SELECT * FROM document_chunks
+        WHERE knowledge_base_id = :knowledgeBaseId
+        AND content ILIKE CONCAT('%', :query, '%')
+        ORDER BY 
+            CASE 
+                WHEN content ILIKE CONCAT(:query, '%') THEN 1
+                WHEN content ILIKE CONCAT('%', :query, '%') THEN 2
+                ELSE 3
+            END,
+            LENGTH(content)
+        LIMIT :limit
+        """, nativeQuery = true)
+    List<DocumentChunk> findByFuzzySearch(@Param("knowledgeBaseId") Long knowledgeBaseId,
+                                         @Param("query") String query,
+                                         @Param("limit") int limit);
     
     /**
      * 使用原生SQL保存文档片段（处理vector类型，包含knowledge_base_id）
