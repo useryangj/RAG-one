@@ -1,10 +1,22 @@
 spring:
   application:
     name: RAG-one
-  
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: ${REDIS_DATABASE:0}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
   # 数据库配置
   datasource:
-    url: jdbc:postgresql://localhost:5432/ragone
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/ragone
     username: ${DB_USERNAME:ragone_user}
     password: ${DB_PASSWORD:ragone_password}
     driver-class-name: org.postgresql.Driver
@@ -33,7 +45,7 @@ langchain4j:
   open-ai:
     chat-model:
       # SiliconFlow API配置
-      api-key: ${SILICONFLOW_API_KEY:}
+      api-key: ${SILICONFLOW_API_KEY:sk-lccjubwiwtvrfbtubsuqclecnhzalcbckwbpdrielsonkcgw}
       base-url: https://api.siliconflow.cn/v1
       model-name: ${LLM_MODEL:Qwen/Qwen2.5-7B-Instruct}
       temperature: 0.7
@@ -51,6 +63,8 @@ jwt:
   secret: ${JWT_SECRET:mySecretKey123456789012345678901234567890}
   expiration: 86400000 # 24小时
 
+
+
 # 应用配置
 app:
   # 文件存储路径
@@ -58,6 +72,15 @@ app:
   # 向量数据库配置
   vector-store:
     dimension: 1024 # 根据选择的embedding模型调整
+  # 聊天缓存配置
+  chat:
+    cache:
+      # 每个会话最多缓存的对话轮数
+      max-conversation-turns: 10
+      # 缓存过期时间（小时）
+      ttl-hours: 24
+      # 是否启用聊天历史缓存
+      enabled: true
   
 # 服务器配置
 server:

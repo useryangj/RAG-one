@@ -3,6 +3,8 @@ package com.example.ragone.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import org.hibernate.type.SqlTypes;
+import org.hibernate.annotations.JdbcTypeCode;
 
 /**
  * 聊天历史实体类
@@ -37,12 +39,14 @@ public class ChatHistory {
     private String assistantResponse;
     
     @Column(name = "context_chunks", columnDefinition = "JSONB")
+    @JdbcTypeCode(SqlTypes.JSON)
     private String contextChunks;
     
     @Column(name = "response_time_ms")
     private Long responseTimeMs;
     
     @Column(name = "token_usage", columnDefinition = "JSONB")
+    @JdbcTypeCode(SqlTypes.JSON)
     private String tokenUsage;
     
     @Column(name = "created_at", nullable = false)
