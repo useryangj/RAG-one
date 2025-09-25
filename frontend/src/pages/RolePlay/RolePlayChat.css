@@ -1,0 +1,312 @@
+.roleplay-chat {
+  padding: 24px;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.roleplay-chat-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  gap: 16px;
+}
+
+/* 角色信息头部 */
+.character-header {
+  margin-bottom: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.character-header .ant-avatar {
+  border: 3px solid #f0f0f0;
+}
+
+/* 会话统计 */
+.session-stats {
+  margin-bottom: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.session-stats .ant-statistic-title {
+  font-size: 12px;
+  color: #666;
+}
+
+.session-stats .ant-statistic-content {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* 对话区域 */
+.chat-area {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-area .ant-card-body {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* 消息容器 */
+.messages-container {
+  flex: 1;
+  padding: 20px;
+  max-height: 500px;
+  overflow-y: auto;
+  background: linear-gradient(to bottom, #fafafa, #ffffff);
+}
+
+/* 欢迎消息 */
+.welcome-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 20px;
+  background: linear-gradient(135deg, #e6f7ff, #f0f9ff);
+  border-radius: 12px;
+  border: 1px solid #91d5ff;
+  margin-bottom: 20px;
+}
+
+.welcome-text {
+  flex: 1;
+}
+
+/* 消息组 */
+.message-group {
+  margin-bottom: 20px;
+}
+
+.message {
+  margin-bottom: 12px;
+}
+
+.message-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* 用户消息 */
+.user-message .message-content {
+  justify-content: flex-end;
+  flex-direction: row-reverse;
+}
+
+.user-bubble {
+  background: linear-gradient(135deg, #1890ff, #40a9ff);
+  color: white;
+  border-radius: 18px 18px 4px 18px;
+  padding: 12px 16px;
+  max-width: 70%;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3);
+}
+
+/* 角色消息 */
+.character-message .message-content {
+  justify-content: flex-start;
+}
+
+.character-bubble {
+  background: white;
+  border: 1px solid #f0f0f0;
+  border-radius: 18px 18px 18px 4px;
+  padding: 12px 16px;
+  max-width: 70%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 消息元数据 */
+.message-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.message-rating .ant-rate {
+  font-size: 12px;
+}
+
+/* 输入区域 */
+.input-area {
+  padding: 16px 20px;
+  background: white;
+  border-top: 1px solid #f0f0f0;
+  border-radius: 0 0 12px 12px;
+}
+
+.input-area .ant-input {
+  border-radius: 20px;
+  border: 1px solid #d9d9d9;
+  padding: 8px 16px;
+  resize: none;
+}
+
+.input-area .ant-input:focus {
+  border-color: #40a9ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.input-area .ant-btn {
+  border-radius: 20px;
+  height: auto;
+  padding: 8px 16px;
+  margin-left: 8px;
+}
+
+/* 无会话状态 */
+.no-session {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  background: #fafafa;
+  border-radius: 0 0 12px 12px;
+}
+
+/* 滚动条样式 */
+.messages-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messages-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.messages-container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* 标签样式 */
+.ant-tag {
+  border-radius: 12px;
+  font-size: 11px;
+  padding: 2px 8px;
+}
+
+/* 按钮样式 */
+.ant-btn {
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.ant-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 头像样式 */
+.ant-avatar {
+  border: 2px solid #f0f0f0;
+  transition: all 0.3s ease;
+}
+
+.character-message .ant-avatar:hover {
+  border-color: #40a9ff;
+  transform: scale(1.1);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .roleplay-chat {
+    padding: 12px;
+  }
+  
+  .character-header .ant-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .session-stats .ant-col {
+    margin-bottom: 16px;
+  }
+  
+  .user-bubble,
+  .character-bubble {
+    max-width: 85%;
+    font-size: 14px;
+  }
+  
+  .messages-container {
+    max-height: 400px;
+    padding: 16px;
+  }
+  
+  .input-area {
+    padding: 12px 16px;
+  }
+  
+  .input-area .ant-input {
+    font-size: 14px;
+  }
+}
+
+/* 动画效果 */
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message {
+  animation: messageSlideIn 0.3s ease-out;
+}
+
+/* 加载状态 */
+.ant-spin-container {
+  min-height: 200px;
+}
+
+/* 模态框样式 */
+.ant-modal-header {
+  border-bottom: 1px solid #f0f0f0;
+  border-radius: 8px 8px 0 0;
+}
+
+.ant-modal-body {
+  padding: 20px;
+}
+
+/* 列表项样式 */
+.ant-list-item {
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.3s ease;
+}
+
+.ant-list-item:hover {
+  background-color: #fafafa;
+}
+
+.ant-list-item-meta-title {
+  font-weight: 600;
+  color: #262626;
+}
+
+.ant-list-item-meta-description {
+  color: #8c8c8c;
+}

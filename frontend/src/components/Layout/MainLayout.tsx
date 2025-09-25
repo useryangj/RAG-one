@@ -10,6 +10,8 @@ import {
   UserOutlined,
   LogoutOutlined,
   SettingOutlined,
+  RobotOutlined,
+  TeamOutlined,
 } from '@ant-design/icons';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -39,6 +41,16 @@ const MainLayout: React.FC = () => {
       key: '/chat',
       icon: <MessageOutlined />,
       label: 'AI 对话',
+    },
+    {
+      key: '/characters',
+      icon: <TeamOutlined />,
+      label: '角色管理',
+    },
+    {
+      key: '/roleplay',
+      icon: <RobotOutlined />,
+      label: '角色扮演',
     },
     {
       key: '/documents',

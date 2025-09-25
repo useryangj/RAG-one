@@ -27,19 +27,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const initAuth = async () => {
       try {
-        if (authUtils.isAuthenticated()) {
-          const currentUser = authUtils.getCurrentUser();
-          if (currentUser) {
-            // 验证token是否有效，获取最新用户信息
-            try {
-              const freshUser = await authApi.getCurrentUser();
-              setUser(freshUser);
-            } catch (error) {
-              // Token无效，清除本地存储
-              authUtils.logout();
-              setUser(null);
-            }
-          }
+        // 首先检查本地存储的用户信息
+        const currentUser = authUtils.getCurrentUser();
+        const hasValidToken = authUtils.isAuthenticated();
+        
+        if (currentUser && hasValidToken) {
+          // 有用户信息且token有效，设置用户状态
+          setUser(currentUser);
+          
+          // 异步验证token，但不阻塞UI
+          authApi.getCurrentUser().catch(() => {
+            // Token验证失败，静默清除状态
+            console.log('Token validation failed, clearing auth state');
+            authUtils.logout();
+            setUser(null);
+          });
+        } else {
+          // 没有有效的认证信息，清除状态
+          authUtils.logout();
+          setUser(null);
         }
       } catch (error) {
         console.error('Auth initialization error:', error);
@@ -101,7 +107,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     login,
     register,
     logout,
-    isAuthenticated: !!user && authUtils.isAuthenticated(),
+    isAuthenticated: !!user,
   };
 
   return (

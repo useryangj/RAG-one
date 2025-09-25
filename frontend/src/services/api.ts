@@ -11,6 +11,14 @@ import {
   AskQuestionRequest,
   AskQuestionResponse,
   ApiResponse,
+  Character,
+  CreateCharacterRequest,
+  UpdateCharacterRequest,
+  RolePlaySession,
+  RolePlayMessage,
+  StartRolePlayRequest,
+  SendRolePlayMessageRequest,
+  RolePlayMessageResponse,
 } from '../types';
 
 // 创建axios实例
@@ -50,7 +58,11 @@ api.interceptors.response.use(
           message.error('登录已过期，请重新登录');
           localStorage.removeItem('token');
           localStorage.removeItem('user');
-          window.location.href = '/login';
+          // 使用React Router进行重定向，而不是直接操作window.location
+          if (window.location.pathname !== '/login') {
+            window.history.pushState({}, '', '/login');
+            window.dispatchEvent(new PopStateEvent('popstate'));
+          }
           break;
         case 403:
           message.error('没有权限访问该资源');
@@ -182,6 +194,118 @@ export const ragApi = {
     const response = await api.post<AskQuestionResponse>('/rag/ask', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
+    return response.data;
+  },
+};
+
+// 角色扮演相关API
+export const characterApi = {
+  // 创建角色
+  create: async (data: CreateCharacterRequest): Promise<Character> => {
+    const response = await api.post<Character>('/characters', data);
+    return response.data;
+  },
+
+  // 获取用户的所有角色
+  getAll: async (): Promise<Character[]> => {
+    const response = await api.get<Character[]>('/characters');
+    return response.data;
+  },
+
+  // 根据知识库获取角色
+  getByKnowledgeBase: async (knowledgeBaseId: number): Promise<Character[]> => {
+    const response = await api.get<Character[]>(`/characters/knowledge-base/${knowledgeBaseId}`);
+    return response.data;
+  },
+
+  // 获取角色详情
+  getById: async (id: number): Promise<Character> => {
+    const response = await api.get<Character>(`/characters/${id}`);
+    return response.data;
+  },
+
+  // 更新角色
+  update: async (id: number, data: UpdateCharacterRequest): Promise<Character> => {
+    const response = await api.put<Character>(`/characters/${id}`, data);
+    return response.data;
+  },
+
+  // 删除角色
+  delete: async (id: number): Promise<ApiResponse> => {
+    const response = await api.delete<ApiResponse>(`/characters/${id}`);
+    return response.data;
+  },
+
+  // 激活/停用角色
+  toggleStatus: async (id: number): Promise<Character> => {
+    const response = await api.patch<Character>(`/characters/${id}/toggle-status`);
+    return response.data;
+  },
+
+  // 生成角色配置文件
+  generateProfile: async (id: number): Promise<ApiResponse> => {
+    const response = await api.post<ApiResponse>(`/characters/${id}/generate-profile`);
+    return response.data;
+  },
+
+  // 搜索角色
+  search: async (query: string, knowledgeBaseId?: number): Promise<Character[]> => {
+    const params = new URLSearchParams({ query });
+    if (knowledgeBaseId) {
+      params.append('knowledgeBaseId', knowledgeBaseId.toString());
+    }
+    const response = await api.get<Character[]>(`/characters/search?${params}`);
+    return response.data;
+  },
+};
+
+// 角色扮演会话相关API
+export const rolePlayApi = {
+  // 开始角色扮演会话
+  startSession: async (data: StartRolePlayRequest): Promise<RolePlaySession> => {
+    const response = await api.post<RolePlaySession>('/roleplay/start', data);
+    return response.data;
+  },
+
+  // 发送消息
+  sendMessage: async (data: SendRolePlayMessageRequest): Promise<RolePlayMessageResponse> => {
+    const response = await api.post<RolePlayMessageResponse>('/roleplay/message', data);
+    return response.data;
+  },
+
+  // 获取用户的会话列表
+  getSessions: async (): Promise<RolePlaySession[]> => {
+    const response = await api.get<RolePlaySession[]>('/roleplay/sessions');
+    return response.data;
+  },
+
+  // 获取会话详情
+  getSession: async (sessionId: string): Promise<RolePlaySession> => {
+    const response = await api.get<RolePlaySession>(`/roleplay/sessions/${sessionId}`);
+    return response.data;
+  },
+
+  // 获取会话历史消息
+  getSessionHistory: async (sessionId: string): Promise<RolePlayMessage[]> => {
+    const response = await api.get<RolePlayMessage[]>(`/roleplay/sessions/${sessionId}/history`);
+    return response.data;
+  },
+
+  // 结束会话
+  endSession: async (sessionId: string): Promise<ApiResponse> => {
+    const response = await api.patch<ApiResponse>(`/roleplay/sessions/${sessionId}/end`);
+    return response.data;
+  },
+
+  // 删除会话
+  deleteSession: async (sessionId: string): Promise<ApiResponse> => {
+    const response = await api.delete<ApiResponse>(`/roleplay/sessions/${sessionId}`);
+    return response.data;
+  },
+
+  // 为消息评分
+  rateMessage: async (messageId: string, rating: number): Promise<ApiResponse> => {
+    const response = await api.patch<ApiResponse>(`/roleplay/messages/${messageId}/rate`, { rating });
     return response.data;
   },
 };

@@ -10,6 +10,8 @@ import Dashboard from './pages/Dashboard';
 import KnowledgeBaseList from './pages/KnowledgeBase/KnowledgeBaseList';
 import DocumentList from './pages/Documents/DocumentList';
 import ChatInterface from './pages/Chat/ChatInterface';
+import CharacterList from './pages/Characters/CharacterList';
+import RolePlayChat from './pages/RolePlay/RolePlayChat';
 import './App.css';
 
 function App() {
@@ -20,14 +22,7 @@ function App() {
           <div className="App">
             <Routes>
               {/* 公开路由 */}
-              <Route
-                path="/login"
-                element={
-                  <ProtectedRoute requireAuth={false}>
-                    <Login />
-                  </ProtectedRoute>
-                }
-              />
+              <Route path="/login" element={<Login />} />
 
               {/* 受保护的路由 */}
               <Route
@@ -43,6 +38,9 @@ function App() {
                 <Route path="knowledge-bases" element={<KnowledgeBaseList />} />
                 <Route path="documents" element={<DocumentList />} />
                 <Route path="chat" element={<ChatInterface />} />
+                <Route path="characters" element={<CharacterList />} />
+                <Route path="roleplay" element={<RolePlayChat />} />
+                <Route path="roleplay/:characterId" element={<RolePlayChat />} />
               </Route>
 
               {/* 404 重定向 */}

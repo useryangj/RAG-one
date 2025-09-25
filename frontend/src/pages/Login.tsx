@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Card, Typography, Tabs, message } from 'antd';
+import { Form, Input, Button, Card, Typography, Tabs, message, Spin } from 'antd';
 import { UserOutlined, LockOutlined, MailOutlined, ContactsOutlined } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -14,10 +14,17 @@ const Login: React.FC = () => {
   const [activeTab, setActiveTab] = useState('login');
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, register } = useAuth();
+  const { login, register, isAuthenticated, loading: authLoading } = useAuth();
 
   // 获取重定向路径
   const from = (location.state as any)?.from?.pathname || '/dashboard';
+
+  // 如果已经登录，重定向到目标页面
+  React.useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      navigate(from, { replace: true });
+    }
+  }, [isAuthenticated, authLoading, navigate, from]);
 
   const handleLogin = async (values: LoginRequest) => {
     setLoading(true);
@@ -53,6 +60,22 @@ const Login: React.FC = () => {
       setLoading(false);
     }
   };
+
+  // 在认证状态检查期间显示加载状态
+  if (authLoading) {
+    return (
+      <div className="login-container">
+        <div className="login-content">
+          <Card className="login-card">
+            <div style={{ textAlign: 'center', padding: '40px' }}>
+              <Spin size="large" />
+              <div style={{ marginTop: '16px' }}>检查登录状态...</div>
+            </div>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="login-container">
