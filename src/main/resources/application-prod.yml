@@ -1,0 +1,157 @@
+spring:
+  application:
+    name: RAG-one
+  profiles:
+    active: prod
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: ${REDIS_DATABASE:0}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
+  
+  # 生产数据库配置
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:ragone}
+    username: ${DB_USERNAME:ragone_user}
+    password: ${DB_PASSWORD:ragone_password}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+      max-lifetime: 1200000
+  
+  # JPA配置
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate  # 生产环境使用validate，不自动创建表
+    show-sql: false  # 生产环境关闭SQL日志
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  
+  # 文件上传配置
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+      enabled: true
+  
+  # Jackson配置
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+
+# LangChain4j配置
+langchain4j:
+  open-ai:
+    chat-model:
+      api-key: ${SILICONFLOW_API_KEY}
+      base-url: https://api.siliconflow.cn/v1
+      model-name: ${LLM_MODEL:Qwen/Qwen2.5-7B-Instruct}
+      temperature: 0.7
+      max-tokens: 2000
+      timeout: 60s
+    
+    embedding-model:
+      api-key: ${SILICONFLOW_API_KEY}
+      base-url: https://api.siliconflow.cn/v1
+      model-name: ${EMBEDDING_MODEL:BAAI/bge-large-zh-v1.5}
+      timeout: 60s
+
+# JWT配置 - 生产环境必须使用强密钥
+jwt:
+  secret: ${JWT_SECRET}  # 必须通过环境变量设置，至少32位
+  expiration: 86400000 # 24小时
+
+# 应用配置
+app:
+  # 文件存储路径
+  file-storage-path: ${FILE_STORAGE_PATH:/app/uploads}
+  # 向量数据库配置
+  vector-store:
+    dimension: 1024
+  # 文档处理配置
+  document:
+    chunk:
+      max-chars: ${DOCUMENT_CHUNK_MAX_CHARS:400}
+      overlap-chars: ${DOCUMENT_CHUNK_OVERLAP:50}
+      max-tokens: ${DOCUMENT_CHUNK_MAX_TOKENS:500}
+  # 聊天缓存配置
+  chat:
+    cache:
+      max-conversation-turns: 10
+      ttl-hours: 24
+      enabled: true
+  
+  # 混合检索配置
+  hybrid-retrieval:
+    enabled: true
+    vector-weight: 0.7
+    keyword-weight: 0.3
+    max-results: 10
+  
+  # 重排序配置
+  reranking:
+    enabled: false
+    max-results: 5
+    diversity-weight: 0.1
+    relevance-weight: 0.9
+
+# 服务器配置
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /api
+  # 生产环境安全配置
+  error:
+    include-message: never
+    include-binding-errors: never
+    include-stacktrace: never
+    include-exception: false
+
+# 日志配置 - 生产环境
+logging:
+  level:
+    root: INFO
+    com.example.ragone: INFO
+    org.springframework.security: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: /app/logs/ragone.log
+    max-size: 100MB
+    max-history: 30
+  logback:
+    rollingpolicy:
+      max-file-size: 100MB
+      max-history: 30
+
+# 管理端点配置 - 生产环境限制访问
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+  security:
+    enabled: true
+
