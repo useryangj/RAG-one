@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.ragone.dto.CharacterDto;
 import com.example.ragone.entity.Character;
 import com.example.ragone.entity.User;
 import com.example.ragone.service.CharacterService;
@@ -63,21 +64,33 @@ public class CharacterController {
      * 获取用户的所有角色
      */
     @GetMapping
-    public ResponseEntity<List<Character>> getUserCharacters(Authentication authentication) {
+    public ResponseEntity<List<CharacterDto>> getUserCharacters(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         List<Character> characters = characterService.getUserCharacters(user, 0, 100).getContent();
-        return ResponseEntity.ok(characters);
+        
+        // 转换为DTO以避免序列化问题
+        List<CharacterDto> characterDtos = characters.stream()
+                .map(CharacterDto::new)
+                .collect(java.util.stream.Collectors.toList());
+        
+        return ResponseEntity.ok(characterDtos);
     }
     
     /**
      * 根据知识库获取角色
      */
     @GetMapping("/knowledge-base/{knowledgeBaseId}")
-    public ResponseEntity<List<Character>> getCharactersByKnowledgeBase(@PathVariable Long knowledgeBaseId,
+    public ResponseEntity<List<CharacterDto>> getCharactersByKnowledgeBase(@PathVariable Long knowledgeBaseId,
                                                                        Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         List<Character> characters = characterService.getCharactersByKnowledgeBase(user, knowledgeBaseId);
-        return ResponseEntity.ok(characters);
+        
+        // 转换为DTO以避免序列化问题
+        List<CharacterDto> characterDtos = characters.stream()
+                .map(CharacterDto::new)
+                .collect(java.util.stream.Collectors.toList());
+        
+        return ResponseEntity.ok(characterDtos);
     }
     
     /**
@@ -180,12 +193,18 @@ public class CharacterController {
      * 搜索角色
      */
     @GetMapping("/search")
-    public ResponseEntity<List<Character>> searchCharacters(@RequestParam String query,
+    public ResponseEntity<List<CharacterDto>> searchCharacters(@RequestParam String query,
                                                           @RequestParam(required = false) Long knowledgeBaseId,
                                                           Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         List<Character> characters = characterService.searchCharacters(user, query);
-        return ResponseEntity.ok(characters);
+        
+        // 转换为DTO以避免序列化问题
+        List<CharacterDto> characterDtos = characters.stream()
+                .map(CharacterDto::new)
+                .collect(java.util.stream.Collectors.toList());
+        
+        return ResponseEntity.ok(characterDtos);
     }
     
     /**

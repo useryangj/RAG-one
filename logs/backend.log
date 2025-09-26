@@ -1,4 +1,12 @@
 [INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for com.example:RAG-one:jar:0.0.1-SNAPSHOT
+[WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier)' must be unique: org.springframework.boot:spring-boot-starter-data-redis:jar -> duplicate declaration of version (?) @ line 147, column 21
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
 [INFO] 
 [INFO] ------------------------< com.example:RAG-one >-------------------------
 [INFO] Building RAG-one 0.0.1-SNAPSHOT
@@ -35,25 +43,38 @@
 
  :: Spring Boot ::                (v3.5.6)
 
-2025-09-22 16:56:22 - Starting RagOneApplication using Java 17.0.16 with PID 58360 (/home/a/IdeaProjects/RAG-one/target/classes started by a in /home/a/IdeaProjects/RAG-one)
-2025-09-22 16:56:22 - Running with Spring Boot v3.5.6, Spring v6.2.11
-2025-09-22 16:56:22 - No active profile set, falling back to 1 default profile: "default"
-2025-09-22 16:56:22 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-09-22 16:56:22 - Finished Spring Data repository scanning in 26 ms. Found 4 JPA repository interfaces.
-2025-09-22 16:56:23 - Tomcat initialized with port 8080 (http)
-2025-09-22 16:56:23 - Starting service [Tomcat]
-2025-09-22 16:56:23 - Starting Servlet engine: [Apache Tomcat/10.1.46]
-2025-09-22 16:56:23 - Initializing Spring embedded WebApplicationContext
-2025-09-22 16:56:23 - Root WebApplicationContext: initialization completed in 693 ms
-2025-09-22 16:56:23 - HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-09-22 16:56:23 - HHH000412: Hibernate ORM core version 6.6.29.Final
-2025-09-22 16:56:23 - HHH000026: Second-level cache disabled
-2025-09-22 16:56:23 - No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-09-22 16:56:23 - HikariPool-1 - Starting...
-2025-09-22 16:56:23 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1f68e4e8
-2025-09-22 16:56:23 - HikariPool-1 - Start completed.
-2025-09-22 16:56:23 - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2025-09-22 16:56:23 - HHH10001005: Database info:
+2025-09-25 22:38:58 - Starting RagOneApplication using Java 17.0.16 with PID 196953 (/home/a/IdeaProjects/RAG-one/target/classes started by a in /home/a/IdeaProjects/RAG-one)
+2025-09-25 22:38:58 - Running with Spring Boot v3.5.6, Spring v6.2.11
+2025-09-25 22:38:58 - No active profile set, falling back to 1 default profile: "default"
+2025-09-25 22:38:59 - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-09-25 22:38:59 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-25 22:38:59 - Finished Spring Data repository scanning in 60 ms. Found 9 JPA repository interfaces.
+2025-09-25 22:38:59 - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-09-25 22:38:59 - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-09-25 22:38:59 - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.ragone.repository.CharacterProfileRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-25 22:38:59 - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.ragone.repository.CharacterRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-25 22:38:59 - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.ragone.repository.ChatHistoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-25 22:38:59 - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.ragone.repository.DocumentChunkRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-25 22:38:59 - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.ragone.repository.DocumentRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-25 22:38:59 - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.ragone.repository.KnowledgeBaseRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-25 22:38:59 - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.ragone.repository.RolePlayHistoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-25 22:38:59 - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.ragone.repository.RolePlaySessionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-25 22:38:59 - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.ragone.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-25 22:38:59 - Finished Spring Data repository scanning in 4 ms. Found 0 Redis repository interfaces.
+2025-09-25 22:38:59 - Tomcat initialized with port 8080 (http)
+2025-09-25 22:38:59 - Starting service [Tomcat]
+2025-09-25 22:38:59 - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-25 22:38:59 - Initializing Spring embedded WebApplicationContext
+2025-09-25 22:38:59 - Root WebApplicationContext: initialization completed in 739 ms
+2025-09-25 22:38:59 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-25 22:38:59 - HHH000412: Hibernate ORM core version 6.6.29.Final
+2025-09-25 22:38:59 - HHH000026: Second-level cache disabled
+2025-09-25 22:38:59 - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-25 22:38:59 - HikariPool-1 - Starting...
+2025-09-25 22:38:59 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@70ed902a
+2025-09-25 22:38:59 - HikariPool-1 - Start completed.
+2025-09-25 22:38:59 - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-09-25 22:38:59 - HHH10001005: Database info:
 	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
 	Database driver: undefined/unknown
 	Database version: 16.10
@@ -61,22 +82,24 @@
 	Isolation level: undefined/unknown
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2025-09-22 16:56:24 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-09-22 16:56:24 - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-09-22 16:56:24 - Filter 'jwtAuthenticationFilter' configured for use
-2025-09-22 16:56:24 - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
-2025-09-22 16:56:24 - Hibernate is in classpath; If applicable, HQL parser will be used.
-2025-09-22 16:56:24 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2025-09-22 16:56:25 - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
-2025-09-22 16:56:25 - Tomcat started on port 8080 (http) with context path '/api'
-2025-09-22 16:56:25 - Started RagOneApplication in 3.031 seconds (process running for 3.218)
-2025-09-22 16:56:26 - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2025-09-22 16:56:26 - Initializing Servlet 'dispatcherServlet'
-2025-09-22 16:56:26 - Completed initialization in 0 ms
-2025-09-22 16:56:26 - Securing GET /auth/me
-2025-09-22 16:56:26 - Set SecurityContextHolder to anonymous SecurityContext
-2025-09-22 16:56:26 - Secured GET /auth/me
-2025-09-22 16:56:26 - Servlet.service() for servlet [dispatcherServlet] in context with path [/api] threw exception [Request processing failed: java.lang.NullPointerException: Cannot invoke "org.springframework.security.core.Authentication.getPrincipal()" because "authentication" is null] with root cause
+2025-09-25 22:39:00 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-25 22:39:00 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-25 22:39:01 - Filter 'jwtAuthenticationFilter' configured for use
+2025-09-25 22:39:01 - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-09-25 22:39:01 - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-09-25 22:39:02 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-09-25 22:39:02 - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-09-25 22:39:02 - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-25 22:39:02 - Started RagOneApplication in 4.085 seconds (process running for 4.248)
+2025-09-25 22:39:03 - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-09-25 22:39:03 - Initializing Servlet 'dispatcherServlet'
+2025-09-25 22:39:03 - Completed initialization in 1 ms
+2025-09-25 22:39:03 - Securing GET /auth/me
+2025-09-25 22:39:03 - Processing request: GET /api/auth/me, JWT token present: false
+2025-09-25 22:39:03 - No JWT token found in request headers
+2025-09-25 22:39:03 - Set SecurityContextHolder to anonymous SecurityContext
+2025-09-25 22:39:03 - Secured GET /auth/me
+2025-09-25 22:39:03 - Servlet.service() for servlet [dispatcherServlet] in context with path [/api] threw exception [Request processing failed: java.lang.NullPointerException: Cannot invoke "org.springframework.security.core.Authentication.getPrincipal()" because "authentication" is null] with root cause
 java.lang.NullPointerException: Cannot invoke "org.springframework.security.core.Authentication.getPrincipal()" because "authentication" is null
 	at com.example.ragone.controller.AuthController.getCurrentUser(AuthController.java:106)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
@@ -122,7 +145,7 @@ java.lang.NullPointerException: Cannot invoke "org.springframework.security.core
 	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
 	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
 	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at com.example.ragone.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:55)
+	at com.example.ragone.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:68)
 	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
 	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
 	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
@@ -188,12 +211,15 @@ java.lang.NullPointerException: Cannot invoke "org.springframework.security.core
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:493)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
 	at java.base/java.lang.Thread.run(Thread.java:840)
-2025-09-22 16:56:26 - Securing GET /error
-2025-09-22 16:56:26 - Set SecurityContextHolder to anonymous SecurityContext
-2025-09-22 16:56:26 - Unauthorized error: Full authentication is required to access this resource
-2025-09-22 16:56:30 - Securing OPTIONS /auth/me
-2025-09-22 16:56:30 - Securing OPTIONS /auth/me
-2025-09-22 16:56:30 - Securing GET /auth/me
+2025-09-25 22:39:03 - Securing GET /error
+2025-09-25 22:39:03 - Set SecurityContextHolder to anonymous SecurityContext
+2025-09-25 22:39:03 - Unauthorized error: Full authentication is required to access this resource
+2025-09-25 22:39:07 - Securing OPTIONS /auth/me
+2025-09-25 22:39:07 - Securing OPTIONS /auth/me
+2025-09-25 22:39:07 - Securing GET /auth/me
+2025-09-25 22:39:07 - Processing request: GET /api/auth/me, JWT token present: true
+2025-09-25 22:39:07 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:39:07 - JWT token is valid for user: admin
 Hibernate: 
     select
         u1_0.id,
@@ -213,8 +239,17 @@ Hibernate:
         users u1_0 
     where
         u1_0.username=?
-2025-09-22 16:56:30 - Secured GET /auth/me
-2025-09-22 16:56:30 - Securing GET /auth/me
+2025-09-25 22:39:07 - User admin authenticated successfully
+2025-09-25 22:39:07 - Secured GET /auth/me
+2025-09-25 22:39:07 - Securing OPTIONS /knowledge-bases
+2025-09-25 22:39:07 - Securing GET /auth/me
+2025-09-25 22:39:07 - Processing request: GET /api/auth/me, JWT token present: true
+2025-09-25 22:39:07 - Securing OPTIONS /knowledge-bases
+2025-09-25 22:39:07 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:39:07 - JWT token is valid for user: admin
+2025-09-25 22:39:07 - Securing GET /knowledge-bases
+2025-09-25 22:39:07 - Processing request: GET /api/knowledge-bases, JWT token present: true
+2025-09-25 22:39:07 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
 Hibernate: 
     select
         u1_0.id,
@@ -234,10 +269,7 @@ Hibernate:
         users u1_0 
     where
         u1_0.username=?
-2025-09-22 16:56:30 - Secured GET /auth/me
-2025-09-22 16:56:30 - Securing OPTIONS /knowledge-bases
-2025-09-22 16:56:30 - Securing OPTIONS /knowledge-bases
-2025-09-22 16:56:30 - Securing GET /knowledge-bases
+2025-09-25 22:39:07 - JWT token is valid for user: admin
 Hibernate: 
     select
         u1_0.id,
@@ -257,7 +289,10 @@ Hibernate:
         users u1_0 
     where
         u1_0.username=?
-2025-09-22 16:56:30 - Secured GET /knowledge-bases
+2025-09-25 22:39:07 - User admin authenticated successfully
+2025-09-25 22:39:07 - Secured GET /auth/me
+2025-09-25 22:39:07 - User admin authenticated successfully
+2025-09-25 22:39:07 - Secured GET /knowledge-bases
 Hibernate: 
     select
         kb1_0.id,
@@ -272,7 +307,10 @@ Hibernate:
     where
         kb1_0.user_id=? 
         and kb1_0.is_active
-2025-09-22 16:56:30 - Securing GET /knowledge-bases
+2025-09-25 22:39:07 - Securing GET /knowledge-bases
+2025-09-25 22:39:07 - Processing request: GET /api/knowledge-bases, JWT token present: true
+2025-09-25 22:39:07 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:39:07 - JWT token is valid for user: admin
 Hibernate: 
     select
         u1_0.id,
@@ -292,7 +330,8 @@ Hibernate:
         users u1_0 
     where
         u1_0.username=?
-2025-09-22 16:56:30 - Secured GET /knowledge-bases
+2025-09-25 22:39:07 - User admin authenticated successfully
+2025-09-25 22:39:07 - Secured GET /knowledge-bases
 Hibernate: 
     select
         kb1_0.id,
@@ -307,7 +346,12 @@ Hibernate:
     where
         kb1_0.user_id=? 
         and kb1_0.is_active
-2025-09-22 16:56:31 - Securing GET /knowledge-bases
+2025-09-25 22:39:10 - Securing OPTIONS /characters
+2025-09-25 22:39:10 - Securing OPTIONS /characters
+2025-09-25 22:39:10 - Securing GET /characters
+2025-09-25 22:39:10 - Processing request: GET /api/characters, JWT token present: true
+2025-09-25 22:39:10 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:39:10 - JWT token is valid for user: admin
 Hibernate: 
     select
         u1_0.id,
@@ -327,92 +371,78 @@ Hibernate:
         users u1_0 
     where
         u1_0.username=?
-2025-09-22 16:56:31 - Secured GET /knowledge-bases
+2025-09-25 22:39:10 - User admin authenticated successfully
+2025-09-25 22:39:10 - Secured GET /characters
 Hibernate: 
     select
-        kb1_0.id,
-        kb1_0.is_active,
-        kb1_0.created_at,
-        kb1_0.description,
-        kb1_0.name,
-        kb1_0.updated_at,
-        kb1_0.user_id 
+        c1_0.id,
+        c1_0.avatar_url,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.is_public,
+        c1_0.knowledge_base_id,
+        c1_0.name,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id 
     from
-        knowledge_bases kb1_0 
+        characters c1_0 
     where
-        kb1_0.user_id=? 
-        and kb1_0.is_active
-2025-09-22 16:56:31 - Securing GET /knowledge-bases
+        c1_0.user_id=? 
+    fetch
+        first ? rows only
 Hibernate: 
     select
-        u1_0.id,
-        u1_0.is_account_non_expired,
-        u1_0.is_account_non_locked,
-        u1_0.created_at,
-        u1_0.is_credentials_non_expired,
-        u1_0.email,
-        u1_0.is_enabled,
-        u1_0.full_name,
-        u1_0.last_login_at,
-        u1_0.password,
-        u1_0.role,
-        u1_0.updated_at,
-        u1_0.username 
+        cp1_0.id,
+        cp1_0.background_story,
+        cp1_0.character_id,
+        cp1_0.conversation_examples,
+        cp1_0.created_at,
+        cp1_0.emotional_patterns,
+        cp1_0.expertise,
+        cp1_0.generation_config,
+        cp1_0.generation_method,
+        cp1_0.goals_and_motivations,
+        cp1_0.interests,
+        cp1_0.personality_traits,
+        cp1_0.restrictions,
+        cp1_0.speaking_style,
+        cp1_0.status,
+        cp1_0.system_prompt,
+        cp1_0.updated_at,
+        cp1_0.version 
     from
-        users u1_0 
+        character_profiles cp1_0 
     where
-        u1_0.username=?
-2025-09-22 16:56:31 - Secured GET /knowledge-bases
+        cp1_0.character_id=?
 Hibernate: 
     select
-        kb1_0.id,
-        kb1_0.is_active,
-        kb1_0.created_at,
-        kb1_0.description,
-        kb1_0.name,
-        kb1_0.updated_at,
-        kb1_0.user_id 
+        cp1_0.id,
+        cp1_0.background_story,
+        cp1_0.character_id,
+        cp1_0.conversation_examples,
+        cp1_0.created_at,
+        cp1_0.emotional_patterns,
+        cp1_0.expertise,
+        cp1_0.generation_config,
+        cp1_0.generation_method,
+        cp1_0.goals_and_motivations,
+        cp1_0.interests,
+        cp1_0.personality_traits,
+        cp1_0.restrictions,
+        cp1_0.speaking_style,
+        cp1_0.status,
+        cp1_0.system_prompt,
+        cp1_0.updated_at,
+        cp1_0.version 
     from
-        knowledge_bases kb1_0 
+        character_profiles cp1_0 
     where
-        kb1_0.user_id=? 
-        and kb1_0.is_active
-2025-09-22 16:56:33 - Securing GET /knowledge-bases
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.is_account_non_expired,
-        u1_0.is_account_non_locked,
-        u1_0.created_at,
-        u1_0.is_credentials_non_expired,
-        u1_0.email,
-        u1_0.is_enabled,
-        u1_0.full_name,
-        u1_0.last_login_at,
-        u1_0.password,
-        u1_0.role,
-        u1_0.updated_at,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-2025-09-22 16:56:33 - Secured GET /knowledge-bases
-Hibernate: 
-    select
-        kb1_0.id,
-        kb1_0.is_active,
-        kb1_0.created_at,
-        kb1_0.description,
-        kb1_0.name,
-        kb1_0.updated_at,
-        kb1_0.user_id 
-    from
-        knowledge_bases kb1_0 
-    where
-        kb1_0.user_id=? 
-        and kb1_0.is_active
-2025-09-22 16:56:33 - Securing GET /knowledge-bases
+        cp1_0.character_id=?
+2025-09-25 22:39:10 - Securing GET /characters
+2025-09-25 22:39:10 - Processing request: GET /api/characters, JWT token present: true
+2025-09-25 22:39:10 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:39:10 - JWT token is valid for user: admin
 Hibernate: 
     select
         u1_0.id,
@@ -432,23 +462,84 @@ Hibernate:
         users u1_0 
     where
         u1_0.username=?
-2025-09-22 16:56:33 - Secured GET /knowledge-bases
+2025-09-25 22:39:10 - User admin authenticated successfully
+2025-09-25 22:39:10 - Secured GET /characters
 Hibernate: 
     select
-        kb1_0.id,
-        kb1_0.is_active,
-        kb1_0.created_at,
-        kb1_0.description,
-        kb1_0.name,
-        kb1_0.updated_at,
-        kb1_0.user_id 
+        c1_0.id,
+        c1_0.avatar_url,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.is_public,
+        c1_0.knowledge_base_id,
+        c1_0.name,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id 
     from
-        knowledge_bases kb1_0 
+        characters c1_0 
     where
-        kb1_0.user_id=? 
-        and kb1_0.is_active
-2025-09-22 16:56:40 - Securing OPTIONS /rag/ask
-2025-09-22 16:56:40 - Securing POST /rag/ask
+        c1_0.user_id=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        cp1_0.id,
+        cp1_0.background_story,
+        cp1_0.character_id,
+        cp1_0.conversation_examples,
+        cp1_0.created_at,
+        cp1_0.emotional_patterns,
+        cp1_0.expertise,
+        cp1_0.generation_config,
+        cp1_0.generation_method,
+        cp1_0.goals_and_motivations,
+        cp1_0.interests,
+        cp1_0.personality_traits,
+        cp1_0.restrictions,
+        cp1_0.speaking_style,
+        cp1_0.status,
+        cp1_0.system_prompt,
+        cp1_0.updated_at,
+        cp1_0.version 
+    from
+        character_profiles cp1_0 
+    where
+        cp1_0.character_id=?
+Hibernate: 
+    select
+        cp1_0.id,
+        cp1_0.background_story,
+        cp1_0.character_id,
+        cp1_0.conversation_examples,
+        cp1_0.created_at,
+        cp1_0.emotional_patterns,
+        cp1_0.expertise,
+        cp1_0.generation_config,
+        cp1_0.generation_method,
+        cp1_0.goals_and_motivations,
+        cp1_0.interests,
+        cp1_0.personality_traits,
+        cp1_0.restrictions,
+        cp1_0.speaking_style,
+        cp1_0.status,
+        cp1_0.system_prompt,
+        cp1_0.updated_at,
+        cp1_0.version 
+    from
+        character_profiles cp1_0 
+    where
+        cp1_0.character_id=?
+2025-09-25 22:39:12 - Securing OPTIONS /roleplay/sessions
+2025-09-25 22:39:12 - Securing OPTIONS /characters/2
+2025-09-25 22:39:12 - Securing GET /roleplay/sessions
+2025-09-25 22:39:12 - Securing GET /characters/2
+2025-09-25 22:39:12 - Processing request: GET /api/roleplay/sessions, JWT token present: true
+2025-09-25 22:39:12 - Processing request: GET /api/characters/2, JWT token present: true
+2025-09-25 22:39:12 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:39:12 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:39:12 - JWT token is valid for user: admin
+2025-09-25 22:39:12 - JWT token is valid for user: admin
 Hibernate: 
     select
         u1_0.id,
@@ -468,21 +559,306 @@ Hibernate:
         users u1_0 
     where
         u1_0.username=?
-2025-09-22 16:56:40 - Secured POST /rag/ask
 Hibernate: 
     select
-        kb1_0.id,
-        kb1_0.is_active,
-        kb1_0.created_at,
-        kb1_0.description,
-        kb1_0.name,
-        kb1_0.updated_at,
-        kb1_0.user_id 
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
     from
-        knowledge_bases kb1_0 
+        users u1_0 
     where
-        kb1_0.id=? 
-        and kb1_0.user_id=?
+        u1_0.username=?
+2025-09-25 22:39:12 - User admin authenticated successfully
+2025-09-25 22:39:12 - User admin authenticated successfully
+2025-09-25 22:39:12 - Secured GET /roleplay/sessions
+2025-09-25 22:39:12 - Secured GET /characters/2
+Hibernate: 
+    select
+        rps1_0.id,
+        rps1_0.character_id,
+        rps1_0.created_at,
+        rps1_0.last_activity_at,
+        rps1_0.message_count,
+        rps1_0.session_config,
+        rps1_0.session_id,
+        rps1_0.session_name,
+        rps1_0.status,
+        rps1_0.total_tokens,
+        rps1_0.updated_at,
+        rps1_0.user_id 
+    from
+        roleplay_sessions rps1_0 
+    where
+        rps1_0.user_id=? 
+    order by
+        rps1_0.last_activity_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.avatar_url,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.is_public,
+        c1_0.knowledge_base_id,
+        c1_0.name,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id 
+    from
+        characters c1_0 
+    where
+        c1_0.id=? 
+        and c1_0.user_id=?
+Hibernate: 
+    select
+        cp1_0.id,
+        cp1_0.background_story,
+        cp1_0.character_id,
+        cp1_0.conversation_examples,
+        cp1_0.created_at,
+        cp1_0.emotional_patterns,
+        cp1_0.expertise,
+        cp1_0.generation_config,
+        cp1_0.generation_method,
+        cp1_0.goals_and_motivations,
+        cp1_0.interests,
+        cp1_0.personality_traits,
+        cp1_0.restrictions,
+        cp1_0.speaking_style,
+        cp1_0.status,
+        cp1_0.system_prompt,
+        cp1_0.updated_at,
+        cp1_0.version 
+    from
+        character_profiles cp1_0 
+    where
+        cp1_0.character_id=?
+2025-09-25 22:39:13 - Securing OPTIONS /roleplay/start
+2025-09-25 22:39:13 - Securing POST /roleplay/start
+2025-09-25 22:39:13 - Processing request: POST /api/roleplay/start, JWT token present: true
+2025-09-25 22:39:13 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:39:13 - JWT token is valid for user: admin
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-25 22:39:13 - User admin authenticated successfully
+2025-09-25 22:39:13 - Secured POST /roleplay/start
+2025-09-25 22:39:13 - Creating roleplay session for user: admin, character: 2
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.avatar_url,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.is_public,
+        c1_0.knowledge_base_id,
+        c1_0.name,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id 
+    from
+        characters c1_0 
+    where
+        c1_0.id=? 
+        and c1_0.user_id=?
+Hibernate: 
+    select
+        cp1_0.id,
+        cp1_0.background_story,
+        cp1_0.character_id,
+        cp1_0.conversation_examples,
+        cp1_0.created_at,
+        cp1_0.emotional_patterns,
+        cp1_0.expertise,
+        cp1_0.generation_config,
+        cp1_0.generation_method,
+        cp1_0.goals_and_motivations,
+        cp1_0.interests,
+        cp1_0.personality_traits,
+        cp1_0.restrictions,
+        cp1_0.speaking_style,
+        cp1_0.status,
+        cp1_0.system_prompt,
+        cp1_0.updated_at,
+        cp1_0.version 
+    from
+        character_profiles cp1_0 
+    where
+        cp1_0.character_id=?
+Hibernate: 
+    select
+        cp1_0.id,
+        cp1_0.background_story,
+        cp1_0.character_id,
+        cp1_0.conversation_examples,
+        cp1_0.created_at,
+        cp1_0.emotional_patterns,
+        cp1_0.expertise,
+        cp1_0.generation_config,
+        cp1_0.generation_method,
+        cp1_0.goals_and_motivations,
+        cp1_0.interests,
+        cp1_0.personality_traits,
+        cp1_0.restrictions,
+        cp1_0.speaking_style,
+        cp1_0.status,
+        cp1_0.system_prompt,
+        cp1_0.updated_at,
+        cp1_0.version 
+    from
+        character_profiles cp1_0 
+    where
+        cp1_0.character_id=?
+Hibernate: 
+    insert 
+    into
+        roleplay_sessions
+        (character_id, created_at, last_activity_at, message_count, session_config, session_id, session_name, status, total_tokens, updated_at, user_id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-09-25 22:39:13 - Roleplay session created: rp_1758811153858_580dff77
+2025-09-25 22:39:24 - Securing OPTIONS /roleplay/message
+2025-09-25 22:39:24 - Securing POST /roleplay/message
+2025-09-25 22:39:24 - Processing request: POST /api/roleplay/message, JWT token present: true
+2025-09-25 22:39:24 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:39:24 - JWT token is valid for user: admin
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-25 22:39:24 - User admin authenticated successfully
+2025-09-25 22:39:24 - Secured POST /roleplay/message
+2025-09-25 22:39:24 - Processing message for session: rp_1758811153858_580dff77, user: admin
+Hibernate: 
+    select
+        rps1_0.id,
+        rps1_0.character_id,
+        rps1_0.created_at,
+        rps1_0.last_activity_at,
+        rps1_0.message_count,
+        rps1_0.session_config,
+        rps1_0.session_id,
+        rps1_0.session_name,
+        rps1_0.status,
+        rps1_0.total_tokens,
+        rps1_0.updated_at,
+        rps1_0.user_id 
+    from
+        roleplay_sessions rps1_0 
+    where
+        rps1_0.session_id=? 
+        and rps1_0.user_id=?
+Hibernate: 
+    select
+        cp1_0.id,
+        cp1_0.background_story,
+        cp1_0.character_id,
+        cp1_0.conversation_examples,
+        cp1_0.created_at,
+        cp1_0.emotional_patterns,
+        cp1_0.expertise,
+        cp1_0.generation_config,
+        cp1_0.generation_method,
+        cp1_0.goals_and_motivations,
+        cp1_0.interests,
+        cp1_0.personality_traits,
+        cp1_0.restrictions,
+        cp1_0.speaking_style,
+        cp1_0.status,
+        cp1_0.system_prompt,
+        cp1_0.updated_at,
+        cp1_0.version 
+    from
+        character_profiles cp1_0 
+    where
+        cp1_0.character_id=?
+Hibernate: 
+    select
+        rph1_0.id,
+        rph1_0.character_id,
+        rph1_0.character_response,
+        rph1_0.context_chunks,
+        rph1_0.created_at,
+        rph1_0.response_time_ms,
+        rph1_0.retrieved_chunks_count,
+        rph1_0.session_id,
+        rph1_0.sentiment_analysis,
+        rph1_0.system_prompt_used,
+        rph1_0.token_usage,
+        rph1_0.turn_number,
+        rph1_0.used_rag,
+        rph1_0.user_id,
+        rph1_0.user_feedback,
+        rph1_0.user_message,
+        rph1_0.user_rating 
+    from
+        roleplay_histories rph1_0 
+    where
+        rph1_0.session_id=? 
+    order by
+        rph1_0.turn_number desc 
+    fetch
+        first ? rows only
+2025-09-25 22:39:24 - Retrieving relevant context for message: ？？
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.avatar_url,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.is_public,
+        c1_0.knowledge_base_id,
+        c1_0.name,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id 
+    from
+        characters c1_0 
+    where
+        c1_0.id=?
 Hibernate: 
     SELECT
         * 
@@ -495,9 +871,60 @@ Hibernate:
         embedding <=> CAST(? AS vector) 
     LIMIT
         ? 
-2025-09-22 16:56:50 - 用户 admin 在知识库 对抗样本 中提问: 什么是对抗样本
-2025-09-22 16:56:52 - Securing OPTIONS /audio/text-to-speech
-2025-09-22 16:56:52 - Securing POST /audio/text-to-speech
+Hibernate: 
+    SELECT
+        dc.*,
+        ts_rank(to_tsvector('simple', dc.content), plainto_tsquery('simple', ?)) as rank 
+    FROM
+        document_chunks dc 
+    WHERE
+        dc.knowledge_base_id = ? 
+        AND to_tsvector('simple', dc.content) @@ plainto_tsquery('simple', ?) 
+    ORDER BY
+        rank DESC 
+    LIMIT
+        ? 
+2025-09-25 22:39:24 - 混合检索完成 - 向量结果: 10, 关键词结果: 0, 融合结果: 10
+2025-09-25 22:39:24 - Retrieved 5 context chunks
+2025-09-25 22:39:24 - Generating character response using AI model
+2025-09-25 22:39:38 - AI response generated successfully, length: 180
+Hibernate: 
+    select
+        max(rph1_0.turn_number) 
+    from
+        roleplay_histories rph1_0 
+    where
+        rph1_0.session_id=?
+Hibernate: 
+    insert 
+    into
+        roleplay_histories
+        (character_id, character_response, context_chunks, created_at, response_time_ms, retrieved_chunks_count, session_id, sentiment_analysis, system_prompt_used, token_usage, turn_number, used_rag, user_id, user_feedback, user_message, user_rating) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-09-25 22:39:38 - Message processed successfully for session: rp_1758811153858_580dff77, turn: 1
+Hibernate: 
+    update
+        roleplay_sessions 
+    set
+        character_id=?,
+        created_at=?,
+        last_activity_at=?,
+        message_count=?,
+        session_config=?,
+        session_id=?,
+        session_name=?,
+        status=?,
+        total_tokens=?,
+        updated_at=?,
+        user_id=? 
+    where
+        id=?
+2025-09-25 22:39:45 - Securing OPTIONS /roleplay/message
+2025-09-25 22:39:45 - Securing POST /roleplay/message
+2025-09-25 22:39:45 - Processing request: POST /api/roleplay/message, JWT token present: true
+2025-09-25 22:39:45 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:39:45 - JWT token is valid for user: admin
 Hibernate: 
     select
         u1_0.id,
@@ -517,130 +944,1534 @@ Hibernate:
         users u1_0 
     where
         u1_0.username=?
-2025-09-22 16:56:52 - Secured POST /audio/text-to-speech
-2025-09-22 16:56:52 - 开始文本转语音，文本长度: 162
-2025-09-22 16:56:52 - 文本转语音过程中发生错误
-org.springframework.web.client.HttpClientErrorException$BadRequest: 400 Bad Request on POST request for "https://api.siliconflow.cn/v1/audio/speech": "{"code":20047,"message":"Invalid voice.","data":null}"
-	at org.springframework.web.client.HttpClientErrorException.create(HttpClientErrorException.java:103)
-	at org.springframework.web.client.DefaultResponseErrorHandler.handleError(DefaultResponseErrorHandler.java:186)
-	at org.springframework.web.client.DefaultResponseErrorHandler.handleError(DefaultResponseErrorHandler.java:147)
-	at org.springframework.web.client.RestTemplate.handleResponse(RestTemplate.java:953)
-	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:902)
-	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:801)
-	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:683)
-	at com.example.ragone.service.AudioService.textToSpeech(AudioService.java:110)
-	at com.example.ragone.controller.AudioController.textToSpeech(AudioController.java:68)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258)
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:991)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:896)
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
-	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
-	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
-	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:125)
-	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
-	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at com.example.ragone.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:55)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
-	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
-	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
-	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
-	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
-	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:319)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$4(HandlerMappingIntrospector.java:267)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
-	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:240)
-	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
-	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1776)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:975)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:493)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
-	at java.base/java.lang.Thread.run(Thread.java:840)
-2025-09-22 16:57:09 - Commencing graceful shutdown. Waiting for active requests to complete
-2025-09-22 16:57:09 - Graceful shutdown complete
-2025-09-22 16:57:09 - Closing JPA EntityManagerFactory for persistence unit 'default'
-2025-09-22 16:57:09 - HikariPool-1 - Shutdown initiated...
-2025-09-22 16:57:09 - HikariPool-1 - Shutdown completed.
+2025-09-25 22:39:45 - User admin authenticated successfully
+2025-09-25 22:39:45 - Secured POST /roleplay/message
+2025-09-25 22:39:45 - Processing message for session: rp_1758811153858_580dff77, user: admin
+Hibernate: 
+    select
+        rps1_0.id,
+        rps1_0.character_id,
+        rps1_0.created_at,
+        rps1_0.last_activity_at,
+        rps1_0.message_count,
+        rps1_0.session_config,
+        rps1_0.session_id,
+        rps1_0.session_name,
+        rps1_0.status,
+        rps1_0.total_tokens,
+        rps1_0.updated_at,
+        rps1_0.user_id 
+    from
+        roleplay_sessions rps1_0 
+    where
+        rps1_0.session_id=? 
+        and rps1_0.user_id=?
+Hibernate: 
+    select
+        cp1_0.id,
+        cp1_0.background_story,
+        cp1_0.character_id,
+        cp1_0.conversation_examples,
+        cp1_0.created_at,
+        cp1_0.emotional_patterns,
+        cp1_0.expertise,
+        cp1_0.generation_config,
+        cp1_0.generation_method,
+        cp1_0.goals_and_motivations,
+        cp1_0.interests,
+        cp1_0.personality_traits,
+        cp1_0.restrictions,
+        cp1_0.speaking_style,
+        cp1_0.status,
+        cp1_0.system_prompt,
+        cp1_0.updated_at,
+        cp1_0.version 
+    from
+        character_profiles cp1_0 
+    where
+        cp1_0.character_id=?
+Hibernate: 
+    select
+        rph1_0.id,
+        rph1_0.character_id,
+        rph1_0.character_response,
+        rph1_0.context_chunks,
+        rph1_0.created_at,
+        rph1_0.response_time_ms,
+        rph1_0.retrieved_chunks_count,
+        rph1_0.session_id,
+        rph1_0.sentiment_analysis,
+        rph1_0.system_prompt_used,
+        rph1_0.token_usage,
+        rph1_0.turn_number,
+        rph1_0.used_rag,
+        rph1_0.user_id,
+        rph1_0.user_feedback,
+        rph1_0.user_message,
+        rph1_0.user_rating 
+    from
+        roleplay_histories rph1_0 
+    where
+        rph1_0.session_id=? 
+    order by
+        rph1_0.turn_number desc 
+    fetch
+        first ? rows only
+2025-09-25 22:39:45 - Retrieving relevant context for message: 你是谁？
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.avatar_url,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.is_public,
+        c1_0.knowledge_base_id,
+        c1_0.name,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id 
+    from
+        characters c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    SELECT
+        * 
+    FROM
+        document_chunks 
+    WHERE
+        knowledge_base_id = ? 
+        AND embedding IS NOT NULL 
+    ORDER BY
+        embedding <=> CAST(? AS vector) 
+    LIMIT
+        ? 
+Hibernate: 
+    SELECT
+        dc.*,
+        ts_rank(to_tsvector('simple', dc.content), plainto_tsquery('simple', ?)) as rank 
+    FROM
+        document_chunks dc 
+    WHERE
+        dc.knowledge_base_id = ? 
+        AND to_tsvector('simple', dc.content) @@ plainto_tsquery('simple', ?) 
+    ORDER BY
+        rank DESC 
+    LIMIT
+        ? 
+2025-09-25 22:39:45 - 混合检索完成 - 向量结果: 10, 关键词结果: 1, 融合结果: 10
+2025-09-25 22:39:45 - Retrieved 5 context chunks
+2025-09-25 22:39:45 - Generating character response using AI model
+2025-09-25 22:40:03 - AI response generated successfully, length: 191
+Hibernate: 
+    select
+        max(rph1_0.turn_number) 
+    from
+        roleplay_histories rph1_0 
+    where
+        rph1_0.session_id=?
+Hibernate: 
+    insert 
+    into
+        roleplay_histories
+        (character_id, character_response, context_chunks, created_at, response_time_ms, retrieved_chunks_count, session_id, sentiment_analysis, system_prompt_used, token_usage, turn_number, used_rag, user_id, user_feedback, user_message, user_rating) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-09-25 22:40:03 - Message processed successfully for session: rp_1758811153858_580dff77, turn: 2
+Hibernate: 
+    update
+        roleplay_sessions 
+    set
+        character_id=?,
+        created_at=?,
+        last_activity_at=?,
+        message_count=?,
+        session_config=?,
+        session_id=?,
+        session_name=?,
+        status=?,
+        total_tokens=?,
+        updated_at=?,
+        user_id=? 
+    where
+        id=?
+2025-09-25 22:40:19 - Securing OPTIONS /auth/me
+2025-09-25 22:40:19 - Securing OPTIONS /auth/me
+2025-09-25 22:40:19 - Securing GET /auth/me
+2025-09-25 22:40:19 - Processing request: GET /api/auth/me, JWT token present: true
+2025-09-25 22:40:19 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:40:19 - JWT token is valid for user: admin
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-25 22:40:19 - User admin authenticated successfully
+2025-09-25 22:40:19 - Secured GET /auth/me
+2025-09-25 22:40:19 - Securing GET /auth/me
+2025-09-25 22:40:19 - Processing request: GET /api/auth/me, JWT token present: true
+2025-09-25 22:40:19 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:40:19 - JWT token is valid for user: admin
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-25 22:40:19 - User admin authenticated successfully
+2025-09-25 22:40:19 - Secured GET /auth/me
+2025-09-25 22:40:19 - Securing OPTIONS /characters/2
+2025-09-25 22:40:19 - Securing OPTIONS /roleplay/sessions
+2025-09-25 22:40:19 - Securing OPTIONS /characters/2
+2025-09-25 22:40:19 - Securing OPTIONS /roleplay/sessions
+2025-09-25 22:40:19 - Securing GET /characters/2
+2025-09-25 22:40:19 - Processing request: GET /api/characters/2, JWT token present: true
+2025-09-25 22:40:19 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:40:19 - Securing GET /roleplay/sessions
+2025-09-25 22:40:19 - JWT token is valid for user: admin
+2025-09-25 22:40:19 - Processing request: GET /api/roleplay/sessions, JWT token present: true
+2025-09-25 22:40:19 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:40:19 - JWT token is valid for user: admin
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-25 22:40:19 - User admin authenticated successfully
+2025-09-25 22:40:19 - Secured GET /characters/2
+2025-09-25 22:40:19 - User admin authenticated successfully
+2025-09-25 22:40:19 - Secured GET /roleplay/sessions
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.avatar_url,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.is_public,
+        c1_0.knowledge_base_id,
+        c1_0.name,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id 
+    from
+        characters c1_0 
+    where
+        c1_0.id=? 
+        and c1_0.user_id=?
+Hibernate: 
+    select
+        rps1_0.id,
+        rps1_0.character_id,
+        rps1_0.created_at,
+        rps1_0.last_activity_at,
+        rps1_0.message_count,
+        rps1_0.session_config,
+        rps1_0.session_id,
+        rps1_0.session_name,
+        rps1_0.status,
+        rps1_0.total_tokens,
+        rps1_0.updated_at,
+        rps1_0.user_id 
+    from
+        roleplay_sessions rps1_0 
+    where
+        rps1_0.user_id=? 
+    order by
+        rps1_0.last_activity_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        cp1_0.id,
+        cp1_0.background_story,
+        cp1_0.character_id,
+        cp1_0.conversation_examples,
+        cp1_0.created_at,
+        cp1_0.emotional_patterns,
+        cp1_0.expertise,
+        cp1_0.generation_config,
+        cp1_0.generation_method,
+        cp1_0.goals_and_motivations,
+        cp1_0.interests,
+        cp1_0.personality_traits,
+        cp1_0.restrictions,
+        cp1_0.speaking_style,
+        cp1_0.status,
+        cp1_0.system_prompt,
+        cp1_0.updated_at,
+        cp1_0.version 
+    from
+        character_profiles cp1_0 
+    where
+        cp1_0.character_id=?
+2025-09-25 22:40:19 - Securing GET /roleplay/sessions
+2025-09-25 22:40:19 - Securing GET /characters/2
+2025-09-25 22:40:19 - Processing request: GET /api/characters/2, JWT token present: true
+2025-09-25 22:40:19 - Processing request: GET /api/roleplay/sessions, JWT token present: true
+2025-09-25 22:40:19 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:40:19 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:40:19 - JWT token is valid for user: admin
+2025-09-25 22:40:19 - JWT token is valid for user: admin
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-25 22:40:19 - User admin authenticated successfully
+2025-09-25 22:40:19 - Secured GET /roleplay/sessions
+2025-09-25 22:40:19 - User admin authenticated successfully
+2025-09-25 22:40:19 - Secured GET /characters/2
+Hibernate: 
+    select
+        rps1_0.id,
+        rps1_0.character_id,
+        rps1_0.created_at,
+        rps1_0.last_activity_at,
+        rps1_0.message_count,
+        rps1_0.session_config,
+        rps1_0.session_id,
+        rps1_0.session_name,
+        rps1_0.status,
+        rps1_0.total_tokens,
+        rps1_0.updated_at,
+        rps1_0.user_id 
+    from
+        roleplay_sessions rps1_0 
+    where
+        rps1_0.user_id=? 
+    order by
+        rps1_0.last_activity_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.avatar_url,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.is_public,
+        c1_0.knowledge_base_id,
+        c1_0.name,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id 
+    from
+        characters c1_0 
+    where
+        c1_0.id=? 
+        and c1_0.user_id=?
+Hibernate: 
+    select
+        cp1_0.id,
+        cp1_0.background_story,
+        cp1_0.character_id,
+        cp1_0.conversation_examples,
+        cp1_0.created_at,
+        cp1_0.emotional_patterns,
+        cp1_0.expertise,
+        cp1_0.generation_config,
+        cp1_0.generation_method,
+        cp1_0.goals_and_motivations,
+        cp1_0.interests,
+        cp1_0.personality_traits,
+        cp1_0.restrictions,
+        cp1_0.speaking_style,
+        cp1_0.status,
+        cp1_0.system_prompt,
+        cp1_0.updated_at,
+        cp1_0.version 
+    from
+        character_profiles cp1_0 
+    where
+        cp1_0.character_id=?
+2025-09-25 22:40:25 - Securing OPTIONS /roleplay/sessions/rp_1758810807207_e724f7a8
+2025-09-25 22:40:25 - Securing DELETE /roleplay/sessions/rp_1758810807207_e724f7a8
+2025-09-25 22:40:25 - Processing request: DELETE /api/roleplay/sessions/rp_1758810807207_e724f7a8, JWT token present: true
+2025-09-25 22:40:25 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:40:25 - JWT token is valid for user: admin
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-25 22:40:25 - User admin authenticated successfully
+2025-09-25 22:40:25 - Secured DELETE /roleplay/sessions/rp_1758810807207_e724f7a8
+2025-09-25 22:40:25 - Deleting session: rp_1758810807207_e724f7a8 for user: admin
+Hibernate: 
+    select
+        rps1_0.id,
+        rps1_0.character_id,
+        rps1_0.created_at,
+        rps1_0.last_activity_at,
+        rps1_0.message_count,
+        rps1_0.session_config,
+        rps1_0.session_id,
+        rps1_0.session_name,
+        rps1_0.status,
+        rps1_0.total_tokens,
+        rps1_0.updated_at,
+        rps1_0.user_id 
+    from
+        roleplay_sessions rps1_0 
+    where
+        rps1_0.session_id=? 
+        and rps1_0.user_id=?
+Hibernate: 
+    select
+        rph1_0.id,
+        rph1_0.character_id,
+        rph1_0.character_response,
+        rph1_0.context_chunks,
+        rph1_0.created_at,
+        rph1_0.response_time_ms,
+        rph1_0.retrieved_chunks_count,
+        rph1_0.session_id,
+        rph1_0.sentiment_analysis,
+        rph1_0.system_prompt_used,
+        rph1_0.token_usage,
+        rph1_0.turn_number,
+        rph1_0.used_rag,
+        rph1_0.user_id,
+        rph1_0.user_feedback,
+        rph1_0.user_message,
+        rph1_0.user_rating 
+    from
+        roleplay_histories rph1_0 
+    where
+        rph1_0.session_id=?
+Hibernate: 
+    select
+        rph1_0.session_id,
+        rph1_0.id,
+        rph1_0.character_id,
+        rph1_0.character_response,
+        rph1_0.context_chunks,
+        rph1_0.created_at,
+        rph1_0.response_time_ms,
+        rph1_0.retrieved_chunks_count,
+        rph1_0.sentiment_analysis,
+        rph1_0.system_prompt_used,
+        rph1_0.token_usage,
+        rph1_0.turn_number,
+        rph1_0.used_rag,
+        rph1_0.user_id,
+        rph1_0.user_feedback,
+        rph1_0.user_message,
+        rph1_0.user_rating 
+    from
+        roleplay_histories rph1_0 
+    where
+        rph1_0.session_id=?
+2025-09-25 22:40:25 - Session deleted: rp_1758810807207_e724f7a8
+Hibernate: 
+    delete 
+    from
+        roleplay_sessions 
+    where
+        id=?
+2025-09-25 22:40:25 - Securing OPTIONS /roleplay/sessions
+2025-09-25 22:40:25 - Securing GET /roleplay/sessions
+2025-09-25 22:40:25 - Processing request: GET /api/roleplay/sessions, JWT token present: true
+2025-09-25 22:40:25 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:40:25 - JWT token is valid for user: admin
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-25 22:40:25 - User admin authenticated successfully
+2025-09-25 22:40:25 - Secured GET /roleplay/sessions
+Hibernate: 
+    select
+        rps1_0.id,
+        rps1_0.character_id,
+        rps1_0.created_at,
+        rps1_0.last_activity_at,
+        rps1_0.message_count,
+        rps1_0.session_config,
+        rps1_0.session_id,
+        rps1_0.session_name,
+        rps1_0.status,
+        rps1_0.total_tokens,
+        rps1_0.updated_at,
+        rps1_0.user_id 
+    from
+        roleplay_sessions rps1_0 
+    where
+        rps1_0.user_id=? 
+    order by
+        rps1_0.last_activity_at desc 
+    fetch
+        first ? rows only
+2025-09-25 22:40:25 - Securing OPTIONS /roleplay/sessions/rp_1758810705077_f9b7170d
+2025-09-25 22:40:25 - Securing DELETE /roleplay/sessions/rp_1758810705077_f9b7170d
+2025-09-25 22:40:25 - Processing request: DELETE /api/roleplay/sessions/rp_1758810705077_f9b7170d, JWT token present: true
+2025-09-25 22:40:25 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:40:25 - JWT token is valid for user: admin
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-25 22:40:25 - User admin authenticated successfully
+2025-09-25 22:40:25 - Secured DELETE /roleplay/sessions/rp_1758810705077_f9b7170d
+2025-09-25 22:40:25 - Deleting session: rp_1758810705077_f9b7170d for user: admin
+Hibernate: 
+    select
+        rps1_0.id,
+        rps1_0.character_id,
+        rps1_0.created_at,
+        rps1_0.last_activity_at,
+        rps1_0.message_count,
+        rps1_0.session_config,
+        rps1_0.session_id,
+        rps1_0.session_name,
+        rps1_0.status,
+        rps1_0.total_tokens,
+        rps1_0.updated_at,
+        rps1_0.user_id 
+    from
+        roleplay_sessions rps1_0 
+    where
+        rps1_0.session_id=? 
+        and rps1_0.user_id=?
+Hibernate: 
+    select
+        rph1_0.id,
+        rph1_0.character_id,
+        rph1_0.character_response,
+        rph1_0.context_chunks,
+        rph1_0.created_at,
+        rph1_0.response_time_ms,
+        rph1_0.retrieved_chunks_count,
+        rph1_0.session_id,
+        rph1_0.sentiment_analysis,
+        rph1_0.system_prompt_used,
+        rph1_0.token_usage,
+        rph1_0.turn_number,
+        rph1_0.used_rag,
+        rph1_0.user_id,
+        rph1_0.user_feedback,
+        rph1_0.user_message,
+        rph1_0.user_rating 
+    from
+        roleplay_histories rph1_0 
+    where
+        rph1_0.session_id=?
+Hibernate: 
+    select
+        rph1_0.session_id,
+        rph1_0.id,
+        rph1_0.character_id,
+        rph1_0.character_response,
+        rph1_0.context_chunks,
+        rph1_0.created_at,
+        rph1_0.response_time_ms,
+        rph1_0.retrieved_chunks_count,
+        rph1_0.sentiment_analysis,
+        rph1_0.system_prompt_used,
+        rph1_0.token_usage,
+        rph1_0.turn_number,
+        rph1_0.used_rag,
+        rph1_0.user_id,
+        rph1_0.user_feedback,
+        rph1_0.user_message,
+        rph1_0.user_rating 
+    from
+        roleplay_histories rph1_0 
+    where
+        rph1_0.session_id=?
+2025-09-25 22:40:25 - Session deleted: rp_1758810705077_f9b7170d
+Hibernate: 
+    delete 
+    from
+        roleplay_sessions 
+    where
+        id=?
+2025-09-25 22:40:25 - Securing GET /roleplay/sessions
+2025-09-25 22:40:25 - Processing request: GET /api/roleplay/sessions, JWT token present: true
+2025-09-25 22:40:25 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:40:25 - JWT token is valid for user: admin
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-25 22:40:25 - User admin authenticated successfully
+2025-09-25 22:40:25 - Secured GET /roleplay/sessions
+Hibernate: 
+    select
+        rps1_0.id,
+        rps1_0.character_id,
+        rps1_0.created_at,
+        rps1_0.last_activity_at,
+        rps1_0.message_count,
+        rps1_0.session_config,
+        rps1_0.session_id,
+        rps1_0.session_name,
+        rps1_0.status,
+        rps1_0.total_tokens,
+        rps1_0.updated_at,
+        rps1_0.user_id 
+    from
+        roleplay_sessions rps1_0 
+    where
+        rps1_0.user_id=? 
+    order by
+        rps1_0.last_activity_at desc 
+    fetch
+        first ? rows only
+2025-09-25 22:40:26 - Securing OPTIONS /roleplay/sessions/rp_1758809121669_3bf4d722
+2025-09-25 22:40:26 - Securing DELETE /roleplay/sessions/rp_1758809121669_3bf4d722
+2025-09-25 22:40:26 - Processing request: DELETE /api/roleplay/sessions/rp_1758809121669_3bf4d722, JWT token present: true
+2025-09-25 22:40:26 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:40:26 - JWT token is valid for user: admin
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-25 22:40:26 - User admin authenticated successfully
+2025-09-25 22:40:26 - Secured DELETE /roleplay/sessions/rp_1758809121669_3bf4d722
+2025-09-25 22:40:26 - Deleting session: rp_1758809121669_3bf4d722 for user: admin
+Hibernate: 
+    select
+        rps1_0.id,
+        rps1_0.character_id,
+        rps1_0.created_at,
+        rps1_0.last_activity_at,
+        rps1_0.message_count,
+        rps1_0.session_config,
+        rps1_0.session_id,
+        rps1_0.session_name,
+        rps1_0.status,
+        rps1_0.total_tokens,
+        rps1_0.updated_at,
+        rps1_0.user_id 
+    from
+        roleplay_sessions rps1_0 
+    where
+        rps1_0.session_id=? 
+        and rps1_0.user_id=?
+Hibernate: 
+    select
+        rph1_0.id,
+        rph1_0.character_id,
+        rph1_0.character_response,
+        rph1_0.context_chunks,
+        rph1_0.created_at,
+        rph1_0.response_time_ms,
+        rph1_0.retrieved_chunks_count,
+        rph1_0.session_id,
+        rph1_0.sentiment_analysis,
+        rph1_0.system_prompt_used,
+        rph1_0.token_usage,
+        rph1_0.turn_number,
+        rph1_0.used_rag,
+        rph1_0.user_id,
+        rph1_0.user_feedback,
+        rph1_0.user_message,
+        rph1_0.user_rating 
+    from
+        roleplay_histories rph1_0 
+    where
+        rph1_0.session_id=?
+Hibernate: 
+    select
+        rph1_0.session_id,
+        rph1_0.id,
+        rph1_0.character_id,
+        rph1_0.character_response,
+        rph1_0.context_chunks,
+        rph1_0.created_at,
+        rph1_0.response_time_ms,
+        rph1_0.retrieved_chunks_count,
+        rph1_0.sentiment_analysis,
+        rph1_0.system_prompt_used,
+        rph1_0.token_usage,
+        rph1_0.turn_number,
+        rph1_0.used_rag,
+        rph1_0.user_id,
+        rph1_0.user_feedback,
+        rph1_0.user_message,
+        rph1_0.user_rating 
+    from
+        roleplay_histories rph1_0 
+    where
+        rph1_0.session_id=?
+2025-09-25 22:40:26 - Session deleted: rp_1758809121669_3bf4d722
+Hibernate: 
+    delete 
+    from
+        roleplay_sessions 
+    where
+        id=?
+2025-09-25 22:40:26 - Securing GET /roleplay/sessions
+2025-09-25 22:40:26 - Processing request: GET /api/roleplay/sessions, JWT token present: true
+2025-09-25 22:40:26 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:40:26 - JWT token is valid for user: admin
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-25 22:40:26 - User admin authenticated successfully
+2025-09-25 22:40:26 - Secured GET /roleplay/sessions
+Hibernate: 
+    select
+        rps1_0.id,
+        rps1_0.character_id,
+        rps1_0.created_at,
+        rps1_0.last_activity_at,
+        rps1_0.message_count,
+        rps1_0.session_config,
+        rps1_0.session_id,
+        rps1_0.session_name,
+        rps1_0.status,
+        rps1_0.total_tokens,
+        rps1_0.updated_at,
+        rps1_0.user_id 
+    from
+        roleplay_sessions rps1_0 
+    where
+        rps1_0.user_id=? 
+    order by
+        rps1_0.last_activity_at desc 
+    fetch
+        first ? rows only
+2025-09-25 22:40:27 - Securing OPTIONS /knowledge-bases
+2025-09-25 22:40:27 - Securing OPTIONS /knowledge-bases
+2025-09-25 22:40:27 - Securing GET /knowledge-bases
+2025-09-25 22:40:27 - Processing request: GET /api/knowledge-bases, JWT token present: true
+2025-09-25 22:40:27 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:40:27 - JWT token is valid for user: admin
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-25 22:40:27 - User admin authenticated successfully
+2025-09-25 22:40:27 - Secured GET /knowledge-bases
+Hibernate: 
+    select
+        kb1_0.id,
+        kb1_0.is_active,
+        kb1_0.created_at,
+        kb1_0.description,
+        kb1_0.name,
+        kb1_0.updated_at,
+        kb1_0.user_id 
+    from
+        knowledge_bases kb1_0 
+    where
+        kb1_0.user_id=? 
+        and kb1_0.is_active
+2025-09-25 22:40:27 - Securing GET /knowledge-bases
+2025-09-25 22:40:27 - Processing request: GET /api/knowledge-bases, JWT token present: true
+2025-09-25 22:40:27 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:40:27 - JWT token is valid for user: admin
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-25 22:40:27 - User admin authenticated successfully
+2025-09-25 22:40:27 - Secured GET /knowledge-bases
+Hibernate: 
+    select
+        kb1_0.id,
+        kb1_0.is_active,
+        kb1_0.created_at,
+        kb1_0.description,
+        kb1_0.name,
+        kb1_0.updated_at,
+        kb1_0.user_id 
+    from
+        knowledge_bases kb1_0 
+    where
+        kb1_0.user_id=? 
+        and kb1_0.is_active
+2025-09-25 22:40:30 - Securing OPTIONS /characters
+2025-09-25 22:40:30 - Securing OPTIONS /characters
+2025-09-25 22:40:30 - Securing GET /characters
+2025-09-25 22:40:30 - Processing request: GET /api/characters, JWT token present: true
+2025-09-25 22:40:30 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:40:30 - JWT token is valid for user: admin
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-25 22:40:30 - User admin authenticated successfully
+2025-09-25 22:40:30 - Secured GET /characters
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.avatar_url,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.is_public,
+        c1_0.knowledge_base_id,
+        c1_0.name,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id 
+    from
+        characters c1_0 
+    where
+        c1_0.user_id=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        cp1_0.id,
+        cp1_0.background_story,
+        cp1_0.character_id,
+        cp1_0.conversation_examples,
+        cp1_0.created_at,
+        cp1_0.emotional_patterns,
+        cp1_0.expertise,
+        cp1_0.generation_config,
+        cp1_0.generation_method,
+        cp1_0.goals_and_motivations,
+        cp1_0.interests,
+        cp1_0.personality_traits,
+        cp1_0.restrictions,
+        cp1_0.speaking_style,
+        cp1_0.status,
+        cp1_0.system_prompt,
+        cp1_0.updated_at,
+        cp1_0.version 
+    from
+        character_profiles cp1_0 
+    where
+        cp1_0.character_id=?
+Hibernate: 
+    select
+        cp1_0.id,
+        cp1_0.background_story,
+        cp1_0.character_id,
+        cp1_0.conversation_examples,
+        cp1_0.created_at,
+        cp1_0.emotional_patterns,
+        cp1_0.expertise,
+        cp1_0.generation_config,
+        cp1_0.generation_method,
+        cp1_0.goals_and_motivations,
+        cp1_0.interests,
+        cp1_0.personality_traits,
+        cp1_0.restrictions,
+        cp1_0.speaking_style,
+        cp1_0.status,
+        cp1_0.system_prompt,
+        cp1_0.updated_at,
+        cp1_0.version 
+    from
+        character_profiles cp1_0 
+    where
+        cp1_0.character_id=?
+2025-09-25 22:40:30 - Securing GET /characters
+2025-09-25 22:40:30 - Processing request: GET /api/characters, JWT token present: true
+2025-09-25 22:40:30 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:40:30 - JWT token is valid for user: admin
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-25 22:40:30 - User admin authenticated successfully
+2025-09-25 22:40:30 - Secured GET /characters
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.avatar_url,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.is_public,
+        c1_0.knowledge_base_id,
+        c1_0.name,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id 
+    from
+        characters c1_0 
+    where
+        c1_0.user_id=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        cp1_0.id,
+        cp1_0.background_story,
+        cp1_0.character_id,
+        cp1_0.conversation_examples,
+        cp1_0.created_at,
+        cp1_0.emotional_patterns,
+        cp1_0.expertise,
+        cp1_0.generation_config,
+        cp1_0.generation_method,
+        cp1_0.goals_and_motivations,
+        cp1_0.interests,
+        cp1_0.personality_traits,
+        cp1_0.restrictions,
+        cp1_0.speaking_style,
+        cp1_0.status,
+        cp1_0.system_prompt,
+        cp1_0.updated_at,
+        cp1_0.version 
+    from
+        character_profiles cp1_0 
+    where
+        cp1_0.character_id=?
+Hibernate: 
+    select
+        cp1_0.id,
+        cp1_0.background_story,
+        cp1_0.character_id,
+        cp1_0.conversation_examples,
+        cp1_0.created_at,
+        cp1_0.emotional_patterns,
+        cp1_0.expertise,
+        cp1_0.generation_config,
+        cp1_0.generation_method,
+        cp1_0.goals_and_motivations,
+        cp1_0.interests,
+        cp1_0.personality_traits,
+        cp1_0.restrictions,
+        cp1_0.speaking_style,
+        cp1_0.status,
+        cp1_0.system_prompt,
+        cp1_0.updated_at,
+        cp1_0.version 
+    from
+        character_profiles cp1_0 
+    where
+        cp1_0.character_id=?
+2025-09-25 22:40:32 - Securing OPTIONS /roleplay/sessions
+2025-09-25 22:40:32 - Securing OPTIONS /characters/2
+2025-09-25 22:40:32 - Securing GET /characters/2
+2025-09-25 22:40:32 - Securing GET /roleplay/sessions
+2025-09-25 22:40:32 - Processing request: GET /api/characters/2, JWT token present: true
+2025-09-25 22:40:32 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:40:32 - Processing request: GET /api/roleplay/sessions, JWT token present: true
+2025-09-25 22:40:32 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:40:32 - JWT token is valid for user: admin
+2025-09-25 22:40:32 - JWT token is valid for user: admin
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-25 22:40:32 - User admin authenticated successfully
+2025-09-25 22:40:32 - Secured GET /roleplay/sessions
+2025-09-25 22:40:32 - User admin authenticated successfully
+2025-09-25 22:40:32 - Secured GET /characters/2
+Hibernate: 
+    select
+        rps1_0.id,
+        rps1_0.character_id,
+        rps1_0.created_at,
+        rps1_0.last_activity_at,
+        rps1_0.message_count,
+        rps1_0.session_config,
+        rps1_0.session_id,
+        rps1_0.session_name,
+        rps1_0.status,
+        rps1_0.total_tokens,
+        rps1_0.updated_at,
+        rps1_0.user_id 
+    from
+        roleplay_sessions rps1_0 
+    where
+        rps1_0.user_id=? 
+    order by
+        rps1_0.last_activity_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.avatar_url,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.is_public,
+        c1_0.knowledge_base_id,
+        c1_0.name,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id 
+    from
+        characters c1_0 
+    where
+        c1_0.id=? 
+        and c1_0.user_id=?
+Hibernate: 
+    select
+        cp1_0.id,
+        cp1_0.background_story,
+        cp1_0.character_id,
+        cp1_0.conversation_examples,
+        cp1_0.created_at,
+        cp1_0.emotional_patterns,
+        cp1_0.expertise,
+        cp1_0.generation_config,
+        cp1_0.generation_method,
+        cp1_0.goals_and_motivations,
+        cp1_0.interests,
+        cp1_0.personality_traits,
+        cp1_0.restrictions,
+        cp1_0.speaking_style,
+        cp1_0.status,
+        cp1_0.system_prompt,
+        cp1_0.updated_at,
+        cp1_0.version 
+    from
+        character_profiles cp1_0 
+    where
+        cp1_0.character_id=?
+2025-09-25 22:40:34 - Securing OPTIONS /roleplay/start
+2025-09-25 22:40:34 - Securing POST /roleplay/start
+2025-09-25 22:40:34 - Processing request: POST /api/roleplay/start, JWT token present: true
+2025-09-25 22:40:34 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:40:34 - JWT token is valid for user: admin
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-25 22:40:34 - User admin authenticated successfully
+2025-09-25 22:40:34 - Secured POST /roleplay/start
+2025-09-25 22:40:34 - Creating roleplay session for user: admin, character: 2
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.avatar_url,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.is_public,
+        c1_0.knowledge_base_id,
+        c1_0.name,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id 
+    from
+        characters c1_0 
+    where
+        c1_0.id=? 
+        and c1_0.user_id=?
+Hibernate: 
+    select
+        cp1_0.id,
+        cp1_0.background_story,
+        cp1_0.character_id,
+        cp1_0.conversation_examples,
+        cp1_0.created_at,
+        cp1_0.emotional_patterns,
+        cp1_0.expertise,
+        cp1_0.generation_config,
+        cp1_0.generation_method,
+        cp1_0.goals_and_motivations,
+        cp1_0.interests,
+        cp1_0.personality_traits,
+        cp1_0.restrictions,
+        cp1_0.speaking_style,
+        cp1_0.status,
+        cp1_0.system_prompt,
+        cp1_0.updated_at,
+        cp1_0.version 
+    from
+        character_profiles cp1_0 
+    where
+        cp1_0.character_id=?
+Hibernate: 
+    select
+        cp1_0.id,
+        cp1_0.background_story,
+        cp1_0.character_id,
+        cp1_0.conversation_examples,
+        cp1_0.created_at,
+        cp1_0.emotional_patterns,
+        cp1_0.expertise,
+        cp1_0.generation_config,
+        cp1_0.generation_method,
+        cp1_0.goals_and_motivations,
+        cp1_0.interests,
+        cp1_0.personality_traits,
+        cp1_0.restrictions,
+        cp1_0.speaking_style,
+        cp1_0.status,
+        cp1_0.system_prompt,
+        cp1_0.updated_at,
+        cp1_0.version 
+    from
+        character_profiles cp1_0 
+    where
+        cp1_0.character_id=?
+Hibernate: 
+    insert 
+    into
+        roleplay_sessions
+        (character_id, created_at, last_activity_at, message_count, session_config, session_id, session_name, status, total_tokens, updated_at, user_id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-09-25 22:40:34 - Roleplay session created: rp_1758811234176_4aa5bba3
+2025-09-25 22:40:44 - Securing OPTIONS /roleplay/message
+2025-09-25 22:40:44 - Securing POST /roleplay/message
+2025-09-25 22:40:44 - Processing request: POST /api/roleplay/message, JWT token present: true
+2025-09-25 22:40:44 - JWT token found: eyJhbGciOiJIUzI1NiJ9...
+2025-09-25 22:40:44 - JWT token is valid for user: admin
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.is_account_non_expired,
+        u1_0.is_account_non_locked,
+        u1_0.created_at,
+        u1_0.is_credentials_non_expired,
+        u1_0.email,
+        u1_0.is_enabled,
+        u1_0.full_name,
+        u1_0.last_login_at,
+        u1_0.password,
+        u1_0.role,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-25 22:40:44 - User admin authenticated successfully
+2025-09-25 22:40:44 - Secured POST /roleplay/message
+2025-09-25 22:40:44 - Processing message for session: rp_1758811234176_4aa5bba3, user: admin
+Hibernate: 
+    select
+        rps1_0.id,
+        rps1_0.character_id,
+        rps1_0.created_at,
+        rps1_0.last_activity_at,
+        rps1_0.message_count,
+        rps1_0.session_config,
+        rps1_0.session_id,
+        rps1_0.session_name,
+        rps1_0.status,
+        rps1_0.total_tokens,
+        rps1_0.updated_at,
+        rps1_0.user_id 
+    from
+        roleplay_sessions rps1_0 
+    where
+        rps1_0.session_id=? 
+        and rps1_0.user_id=?
+Hibernate: 
+    select
+        cp1_0.id,
+        cp1_0.background_story,
+        cp1_0.character_id,
+        cp1_0.conversation_examples,
+        cp1_0.created_at,
+        cp1_0.emotional_patterns,
+        cp1_0.expertise,
+        cp1_0.generation_config,
+        cp1_0.generation_method,
+        cp1_0.goals_and_motivations,
+        cp1_0.interests,
+        cp1_0.personality_traits,
+        cp1_0.restrictions,
+        cp1_0.speaking_style,
+        cp1_0.status,
+        cp1_0.system_prompt,
+        cp1_0.updated_at,
+        cp1_0.version 
+    from
+        character_profiles cp1_0 
+    where
+        cp1_0.character_id=?
+Hibernate: 
+    select
+        rph1_0.id,
+        rph1_0.character_id,
+        rph1_0.character_response,
+        rph1_0.context_chunks,
+        rph1_0.created_at,
+        rph1_0.response_time_ms,
+        rph1_0.retrieved_chunks_count,
+        rph1_0.session_id,
+        rph1_0.sentiment_analysis,
+        rph1_0.system_prompt_used,
+        rph1_0.token_usage,
+        rph1_0.turn_number,
+        rph1_0.used_rag,
+        rph1_0.user_id,
+        rph1_0.user_feedback,
+        rph1_0.user_message,
+        rph1_0.user_rating 
+    from
+        roleplay_histories rph1_0 
+    where
+        rph1_0.session_id=? 
+    order by
+        rph1_0.turn_number desc 
+    fetch
+        first ? rows only
+2025-09-25 22:40:44 - Retrieving relevant context for message: 你会什么魔法吗？
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.avatar_url,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.is_public,
+        c1_0.knowledge_base_id,
+        c1_0.name,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id 
+    from
+        characters c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    SELECT
+        * 
+    FROM
+        document_chunks 
+    WHERE
+        knowledge_base_id = ? 
+        AND embedding IS NOT NULL 
+    ORDER BY
+        embedding <=> CAST(? AS vector) 
+    LIMIT
+        ? 
+Hibernate: 
+    SELECT
+        dc.*,
+        ts_rank(to_tsvector('simple', dc.content), plainto_tsquery('simple', ?)) as rank 
+    FROM
+        document_chunks dc 
+    WHERE
+        dc.knowledge_base_id = ? 
+        AND to_tsvector('simple', dc.content) @@ plainto_tsquery('simple', ?) 
+    ORDER BY
+        rank DESC 
+    LIMIT
+        ? 
+2025-09-25 22:40:44 - 混合检索完成 - 向量结果: 10, 关键词结果: 0, 融合结果: 10
+2025-09-25 22:40:44 - Retrieved 5 context chunks
+2025-09-25 22:40:44 - Generating character response using AI model
+2025-09-25 22:40:49 - AI response generated successfully, length: 153
+Hibernate: 
+    select
+        max(rph1_0.turn_number) 
+    from
+        roleplay_histories rph1_0 
+    where
+        rph1_0.session_id=?
+Hibernate: 
+    insert 
+    into
+        roleplay_histories
+        (character_id, character_response, context_chunks, created_at, response_time_ms, retrieved_chunks_count, session_id, sentiment_analysis, system_prompt_used, token_usage, turn_number, used_rag, user_id, user_feedback, user_message, user_rating) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-09-25 22:40:49 - Message processed successfully for session: rp_1758811234176_4aa5bba3, turn: 1
+Hibernate: 
+    update
+        roleplay_sessions 
+    set
+        character_id=?,
+        created_at=?,
+        last_activity_at=?,
+        message_count=?,
+        session_config=?,
+        session_id=?,
+        session_name=?,
+        status=?,
+        total_tokens=?,
+        updated_at=?,
+        user_id=? 
+    where
+        id=?
+2025-09-25 22:49:54 - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-25 22:49:54 - Graceful shutdown complete
+2025-09-25 22:49:54 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-09-25 22:49:54 - HikariPool-1 - Shutdown initiated...
+2025-09-25 22:49:54 - HikariPool-1 - Shutdown completed.

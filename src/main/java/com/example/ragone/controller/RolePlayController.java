@@ -4,7 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,7 +32,8 @@ import com.example.ragone.service.RolePlayService;
 @RequestMapping("/roleplay")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class RolePlayController {
-    
+
+    private static final Logger log = LoggerFactory.getLogger(RolePlayController.class);
     @Autowired
     private RolePlayService rolePlayService;
     
@@ -43,9 +47,11 @@ public class RolePlayController {
         
         try {
             Long characterId = Long.valueOf(request.get("characterId").toString());
-            String scenario = (String) request.get("scenario");
+            // 兼容前端的sessionName字段，如果没有则使用scenario
+            String sessionName = (String) request.getOrDefault("sessionName", 
+                                 (String) request.get("scenario"));
             
-            RolePlaySession session = rolePlayService.createSession(user, characterId, scenario);
+            RolePlaySession session = rolePlayService.createSession(user, characterId, sessionName);
             return ResponseEntity.ok(session);
         } catch (Exception e) {
             Map<String, String> response = new HashMap<>();
@@ -67,15 +73,45 @@ public class RolePlayController {
             String message = (String) request.get("message");
             
             RolePlayHistory history = rolePlayService.sendMessage(user, sessionId, message);
+            
+            // 构建符合前端期望的响应格式
             Map<String, Object> response = new HashMap<>();
-            response.put("message", history.getCharacterResponse());
-            response.put("turnNumber", history.getTurnNumber());
-            response.put("responseTime", history.getResponseTimeMs());
+            response.put("sessionId", sessionId);
+            response.put("userMessage", history.getUserMessage());
+            response.put("characterResponse", history.getCharacterResponse());
+            response.put("responseTimeMs", history.getResponseTimeMs());
+            response.put("tokenUsage", extractTokenUsage(history.getTokenUsage()));
+            response.put("usedRag", history.getUsedRag());
+            response.put("retrievedDocumentCount", history.getRetrievedChunksCount());
+            response.put("timestamp", System.currentTimeMillis());
+            
             return ResponseEntity.ok(response);
         } catch (Exception e) {
+            log.error("sendMessage error", e);
             Map<String, String> response = new HashMap<>();
             response.put("message", e.getMessage());
             return ResponseEntity.badRequest().body(response);
+        }
+    }
+    
+    /**
+     * 从JSON字符串中提取token使用量
+     */
+    private int extractTokenUsage(String tokenUsageJson) {
+        try {
+            if (tokenUsageJson == null) return 0;
+            
+            ObjectMapper mapper = new ObjectMapper();
+            @SuppressWarnings("unchecked")
+            Map<String, Object> tokenData = mapper.readValue(tokenUsageJson, Map.class);
+            Object totalTokens = tokenData.get("totalTokens");
+            
+            if (totalTokens instanceof Number) {
+                return ((Number) totalTokens).intValue();
+            }
+            return 0;
+        } catch (Exception e) {
+            return 0;
         }
     }
     

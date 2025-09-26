@@ -6,6 +6,7 @@ import com.example.ragone.repository.RolePlayHistoryRepository;
 import com.example.ragone.repository.RolePlaySessionRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.langchain4j.model.chat.ChatLanguageModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +46,8 @@ public class RolePlayService {
     @Autowired
     private ObjectMapper objectMapper;
     
-    // TODO: 注入AI服务（如OpenAI API客户端）
-    // @Autowired
-    // private OpenAIService openAIService;
+    @Autowired
+    private ChatLanguageModel chatLanguageModel;
     
     /**
      * 创建新的角色扮演会话
@@ -279,28 +279,69 @@ public class RolePlayService {
      * 生成角色回复
      */
     private String generateCharacterResponse(String conversationContext, CharacterProfile profile) {
-        logger.debug("Generating character response");
+        logger.debug("Generating character response using AI model");
         
-        // TODO: 调用实际的AI服务生成回复
-        // 这里使用模拟实现
+        try {
+            // 构建完整的提示词
+            String fullPrompt = buildRolePlayPrompt(conversationContext, profile);
+            
+            // 调用AI模型生成回复
+            String response = chatLanguageModel.generate(fullPrompt);
+            
+            logger.debug("AI response generated successfully, length: {}", response.length());
+            return response;
+            
+        } catch (Exception e) {
+            logger.error("Failed to generate AI response, falling back to default", e);
+            
+            // 如果AI调用失败，使用备用回复
+            String characterName = profile.getCharacter().getName();
+            return String.format("【%s】抱歉，我现在有些困惑，能否换个方式问我呢？", characterName);
+        }
+    }
+    
+    /**
+     * 构建角色扮演的完整提示词
+     */
+    private String buildRolePlayPrompt(String conversationContext, CharacterProfile profile) {
+        StringBuilder promptBuilder = new StringBuilder();
         
-        // 模拟AI回复生成
-        String characterName = profile.getCharacter().getName();
+        // 1. 系统提示词（角色人设）
+        promptBuilder.append("# 角色设定\n");
+        promptBuilder.append(profile.getSystemPrompt()).append("\n\n");
         
-        // 简单的模拟回复逻辑
-        List<String> responses = Arrays.asList(
-            "这是一个很有趣的问题，让我想想...",
-            "根据我的了解，我认为...",
-            "这让我想起了...",
-            "我很乐意和你分享我的看法...",
-            "这确实是值得深入思考的话题..."
-        );
+        // 2. 角色详细信息
+        if (profile.getPersonalityTraits() != null) {
+            promptBuilder.append("## 性格特征\n");
+            promptBuilder.append(profile.getPersonalityTraits()).append("\n\n");
+        }
         
-        Random random = new Random();
-        String baseResponse = responses.get(random.nextInt(responses.size()));
+        if (profile.getSpeakingStyle() != null) {
+            promptBuilder.append("## 说话风格\n");
+            promptBuilder.append(profile.getSpeakingStyle()).append("\n\n");
+        }
         
-        return String.format("作为%s，%s 基于我们之前的对话和相关知识，我想说的是...", 
-                           characterName, baseResponse);
+        if (profile.getBackgroundStory() != null) {
+            promptBuilder.append("## 背景故事\n");
+            promptBuilder.append(profile.getBackgroundStory()).append("\n\n");
+        }
+        
+        if (profile.getRestrictions() != null) {
+            promptBuilder.append("## 行为限制\n");
+            promptBuilder.append(profile.getRestrictions()).append("\n\n");
+        }
+        
+        // 3. 对话上下文和知识库内容
+        promptBuilder.append("# 对话上下文\n");
+        promptBuilder.append(conversationContext).append("\n\n");
+        
+        // 4. 指令
+        promptBuilder.append("# 指令\n");
+        promptBuilder.append("请严格按照上述角色设定进行回复，保持角色一致性。");
+        promptBuilder.append("回复应该自然、符合角色特点，不要提及你是AI或角色扮演。");
+        promptBuilder.append("直接以角色身份回复，不需要添加角色名称前缀。\n");
+        
+        return promptBuilder.toString();
     }
     
     /**

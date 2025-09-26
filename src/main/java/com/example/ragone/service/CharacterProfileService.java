@@ -7,6 +7,7 @@ import com.example.ragone.repository.CharacterProfileRepository;
 import com.example.ragone.repository.DocumentChunkRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.langchain4j.model.chat.ChatLanguageModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 /**
  * 角色配置文件服务类
@@ -39,9 +41,11 @@ public class CharacterProfileService {
     @Autowired
     private ObjectMapper objectMapper;
     
-    // TODO: 注入AI服务（如OpenAI API客户端）
-    // @Autowired
-    // private OpenAIService openAIService;
+    @Autowired
+    private ChatLanguageModel chatLanguageModel;
+    
+    @Autowired
+    private CharacterGPTTemplateService characterGPTTemplateService;
     
     /**
      * 异步生成角色配置文件
@@ -84,6 +88,9 @@ public class CharacterProfileService {
         profile.setGenerationMethod(CharacterProfile.GenerationMethod.AI_GENERATED);
         profile.setUpdatedAt(LocalDateTime.now());
         
+        // 设置默认的system_prompt以避免null约束违反
+        profile.setSystemPrompt("正在生成角色配置文件...");
+        
         // 保存初始状态
         profile = characterProfileRepository.save(profile);
         
@@ -93,6 +100,9 @@ public class CharacterProfileService {
             
             // 生成配置文件内容
             generateProfileContent(profile, character, relevantChunks);
+            
+            // 生成CharacterGPT格式的系统提示词
+            generateCharacterGPTSystemPrompt(profile, character, relevantChunks);
             
             // 标记为完成
             profile.setStatus(CharacterProfile.ProfileStatus.COMPLETED);
@@ -107,6 +117,12 @@ public class CharacterProfileService {
             logger.error("Failed to generate profile content for character: {}", character.getId(), e);
             profile.setStatus(CharacterProfile.ProfileStatus.FAILED);
             profile.setUpdatedAt(LocalDateTime.now());
+            
+            // 确保在失败状态下也有有效的system_prompt
+            if (profile.getSystemPrompt() == null || profile.getSystemPrompt().isEmpty()) {
+                profile.setSystemPrompt("角色配置文件生成失败，请稍后重试。");
+            }
+            
             characterProfileRepository.save(profile);
             throw e;
         }
@@ -151,12 +167,69 @@ public class CharacterProfileService {
     }
     
     /**
+     * 生成CharacterGPT格式的系统提示词
+     */
+    private void generateCharacterGPTSystemPrompt(CharacterProfile profile, Character character, List<DocumentChunk> chunks) {
+        logger.debug("Generating CharacterGPT system prompt for character: {}", character.getId());
+        
+        try {
+            // 使用CharacterGPT模板服务生成结构化提示词
+            String characterGPTPrompt = characterGPTTemplateService.generateCharacterGPTPrompt(character, profile, chunks);
+            
+            // 将CharacterGPT格式的提示词作为系统提示词
+            profile.setSystemPrompt(characterGPTPrompt);
+            
+            logger.info("CharacterGPT system prompt generated successfully for character: {}", character.getId());
+            
+        } catch (Exception e) {
+            logger.error("Failed to generate CharacterGPT system prompt for character: {}", character.getId(), e);
+            // 如果生成失败，使用原有的系统提示词生成方法
+            profile.setSystemPrompt(generateSystemPromptWithAI(character, buildBaseContext(character, chunks), chunks));
+        }
+    }
+    
+    /**
      * 生成配置文件内容
      */
     private void generateProfileContent(CharacterProfile profile, Character character, List<DocumentChunk> chunks) {
         logger.debug("Generating profile content for character: {}", character.getId());
         
-        // 构建上下文内容
+        try {
+            // 构建基础上下文
+            String baseContext = buildBaseContext(character, chunks);
+            
+            // 使用AI服务生成各个字段
+            profile.setSystemPrompt(generateSystemPromptWithAI(character, baseContext, chunks));
+            profile.setBackgroundStory(generateBackgroundStoryWithAI(character, baseContext, chunks));
+            profile.setPersonalityTraits(generatePersonalityTraitsWithAI(character, baseContext, chunks));
+            profile.setSpeakingStyle(generateSpeakingStyleWithAI(character, baseContext, chunks));
+            profile.setInterests(generateInterestsWithAI(character, baseContext, chunks));
+            profile.setExpertise(generateExpertiseWithAI(character, baseContext, chunks));
+            profile.setEmotionalPatterns(generateEmotionalPatternsWithAI(character, baseContext, chunks));
+            profile.setConversationExamples(generateConversationExamplesWithAI(character, baseContext, chunks));
+            profile.setRestrictions(generateRestrictionsWithAI(character, baseContext, chunks));
+            profile.setGoalsAndMotivations(generateGoalsAndMotivationsWithAI(character, baseContext, chunks));
+            
+            // 设置生成配置
+            Map<String, Object> generationConfig = new HashMap<>();
+            generationConfig.put("chunksUsed", chunks.size());
+            generationConfig.put("generatedAt", LocalDateTime.now().toString());
+            generationConfig.put("model", "gpt-4");
+            generationConfig.put("aiGenerated", true);
+            
+            profile.setGenerationConfig(objectMapper.writeValueAsString(generationConfig));
+            
+        } catch (Exception e) {
+            logger.error("Failed to generate profile content with AI, falling back to basic generation", e);
+            // 降级到基础生成
+            generateProfileContentFallback(profile, character, chunks);
+        }
+    }
+    
+    /**
+     * 构建基础上下文
+     */
+    private String buildBaseContext(Character character, List<DocumentChunk> chunks) {
         StringBuilder contextBuilder = new StringBuilder();
         contextBuilder.append("角色名称: ").append(character.getName()).append("\n");
         contextBuilder.append("角色描述: ").append(character.getDescription()).append("\n\n");
@@ -166,46 +239,32 @@ public class CharacterProfileService {
             contextBuilder.append("- ").append(chunk.getContent()).append("\n");
         }
         
-        String context = contextBuilder.toString();
+        return contextBuilder.toString();
+    }
+    
+    /**
+     * 降级生成方法（当AI服务不可用时）
+     */
+    private void generateProfileContentFallback(CharacterProfile profile, Character character, List<DocumentChunk> chunks) {
+        String context = buildBaseContext(character, chunks);
         
-        // TODO: 调用AI服务生成各个字段
-        // 这里先使用模拟数据，实际应该调用AI API
-        
-        // 生成系统提示词
         profile.setSystemPrompt(generateSystemPrompt(character, context));
-        
-        // 生成背景故事
-        profile.setBackgroundStory(generateBackgroundStory(character, context));
-        
-        // 生成性格特征
-        profile.setPersonalityTraits(generatePersonalityTraits(character, context));
-        
-        // 生成说话风格
-        profile.setSpeakingStyle(generateSpeakingStyle(character, context));
-        
-        // 生成兴趣爱好
-        profile.setInterests(generateInterests(character, context));
-        
-        // 生成专业领域
-        profile.setExpertise(generateExpertise(character, context));
-        
-        // 生成情感模式
-        profile.setEmotionalPatterns(generateEmotionalPatterns(character, context));
-        
-        // 生成对话示例
+        profile.setBackgroundStory("基于知识库内容生成的背景故事...");
+        profile.setPersonalityTraits("友善、智慧、耐心、幽默");
+        profile.setSpeakingStyle("温和而富有智慧，喜欢用比喻和故事来解释复杂概念");
+        profile.setInterests("阅读、思考、帮助他人解决问题");
+        profile.setExpertise("基于知识库内容的专业领域");
+        profile.setEmotionalPatterns("情绪稳定，善于倾听，能够感同身受");
         profile.setConversationExamples(generateConversationExamples(character, context));
-        
-        // 生成限制条件
-        profile.setRestrictions(generateRestrictions(character, context));
-        
-        // 生成目标动机
-        profile.setGoalsAndMotivations(generateGoalsAndMotivations(character, context));
+        profile.setRestrictions("不提供有害信息，不参与不当讨论，保持角色一致性");
+        profile.setGoalsAndMotivations("帮助用户获得有价值的信息和见解，提供有意义的对话体验");
         
         // 设置生成配置
         Map<String, Object> generationConfig = new HashMap<>();
         generationConfig.put("chunksUsed", chunks.size());
         generationConfig.put("generatedAt", LocalDateTime.now().toString());
-        generationConfig.put("model", "gpt-4"); // TODO: 使用实际模型名称
+        generationConfig.put("model", "fallback");
+        generationConfig.put("aiGenerated", false);
         
         try {
             profile.setGenerationConfig(objectMapper.writeValueAsString(generationConfig));
@@ -214,8 +273,320 @@ public class CharacterProfileService {
         }
     }
     
-    // TODO: 以下方法应该调用实际的AI服务
-    // 现在使用模拟实现
+    // ==================== AI驱动的生成方法 ====================
+    
+    /**
+     * 使用AI生成系统提示词
+     */
+    private String generateSystemPromptWithAI(Character character, String baseContext, List<DocumentChunk> chunks) {
+        String prompt = String.format("""
+            基于以下信息为角色生成系统提示词：
+            
+            角色名称：%s
+            角色描述：%s
+            
+            相关知识库内容：
+            %s
+            
+            请生成一个专业的系统提示词，用于指导AI扮演这个角色。提示词应该：
+            1. 明确角色的身份和背景
+            2. 描述角色的性格特点和说话风格
+            3. 设定角色的行为准则和限制
+            4. 提供角色扮演的指导原则
+            
+            请直接输出系统提示词，不要包含其他解释。
+            """, character.getName(), character.getDescription(), 
+            chunks.stream().map(DocumentChunk::getContent).limit(5).collect(Collectors.joining("\n")));
+        
+        try {
+            return chatLanguageModel.generate(prompt);
+        } catch (Exception e) {
+            logger.warn("Failed to generate system prompt with AI", e);
+            return generateSystemPrompt(character, baseContext);
+        }
+    }
+    
+    /**
+     * 使用AI生成背景故事
+     */
+    private String generateBackgroundStoryWithAI(Character character, String baseContext, List<DocumentChunk> chunks) {
+        String prompt = String.format("""
+            基于以下信息为角色生成详细的背景故事：
+            
+            角色名称：%s
+            角色描述：%s
+            
+            相关知识库内容：
+            %s
+            
+            请生成一个丰富、详细的背景故事，包括：
+            1. 角色的成长经历
+            2. 重要的人生事件
+            3. 人际关系和社交背景
+            4. 专业技能和知识来源
+            5. 个人价值观和信念
+            
+            背景故事应该与知识库内容保持一致，字数控制在300-500字。
+            """, character.getName(), character.getDescription(),
+            chunks.stream().map(DocumentChunk::getContent).limit(8).collect(Collectors.joining("\n")));
+        
+        try {
+            return chatLanguageModel.generate(prompt);
+        } catch (Exception e) {
+            logger.warn("Failed to generate background story with AI", e);
+            return "基于知识库内容生成的背景故事...";
+        }
+    }
+    
+    /**
+     * 使用AI生成性格特征
+     */
+    private String generatePersonalityTraitsWithAI(Character character, String baseContext, List<DocumentChunk> chunks) {
+        String prompt = String.format("""
+            基于以下信息分析角色的性格特征：
+            
+            角色名称：%s
+            角色描述：%s
+            
+            相关知识库内容：
+            %s
+            
+            请分析并总结角色的主要性格特征，包括：
+            1. 核心性格特点（3-5个）
+            2. 行为习惯和偏好
+            3. 情感表达方式
+            4. 社交风格
+            
+            请以简洁的列表形式输出，每个特征用一句话描述。
+            """, character.getName(), character.getDescription(),
+            chunks.stream().map(DocumentChunk::getContent).limit(6).collect(Collectors.joining("\n")));
+        
+        try {
+            return chatLanguageModel.generate(prompt);
+        } catch (Exception e) {
+            logger.warn("Failed to generate personality traits with AI", e);
+            return "友善、智慧、耐心、幽默";
+        }
+    }
+    
+    /**
+     * 使用AI生成说话风格
+     */
+    private String generateSpeakingStyleWithAI(Character character, String baseContext, List<DocumentChunk> chunks) {
+        String prompt = String.format("""
+            基于以下信息分析角色的说话风格：
+            
+            角色名称：%s
+            角色描述：%s
+            
+            相关知识库内容：
+            %s
+            
+            请分析角色的说话风格，包括：
+            1. 语言特点（正式/非正式、简洁/详细等）
+            2. 常用表达方式
+            3. 情感色彩
+            4. 专业术语使用习惯
+            
+            请用2-3句话描述角色的说话风格。
+            """, character.getName(), character.getDescription(),
+            chunks.stream().map(DocumentChunk::getContent).limit(6).collect(Collectors.joining("\n")));
+        
+        try {
+            return chatLanguageModel.generate(prompt);
+        } catch (Exception e) {
+            logger.warn("Failed to generate speaking style with AI", e);
+            return "温和而富有智慧，喜欢用比喻和故事来解释复杂概念";
+        }
+    }
+    
+    /**
+     * 使用AI生成兴趣爱好
+     */
+    private String generateInterestsWithAI(Character character, String baseContext, List<DocumentChunk> chunks) {
+        String prompt = String.format("""
+            基于以下信息分析角色的兴趣爱好：
+            
+            角色名称：%s
+            角色描述：%s
+            
+            相关知识库内容：
+            %s
+            
+            请分析角色的兴趣爱好，包括：
+            1. 主要兴趣领域
+            2. 业余爱好
+            3. 学习偏好
+            4. 娱乐方式
+            
+            请列出3-5个具体的兴趣爱好。
+            """, character.getName(), character.getDescription(),
+            chunks.stream().map(DocumentChunk::getContent).limit(6).collect(Collectors.joining("\n")));
+        
+        try {
+            return chatLanguageModel.generate(prompt);
+        } catch (Exception e) {
+            logger.warn("Failed to generate interests with AI", e);
+            return "阅读、思考、帮助他人解决问题";
+        }
+    }
+    
+    /**
+     * 使用AI生成专业领域
+     */
+    private String generateExpertiseWithAI(Character character, String baseContext, List<DocumentChunk> chunks) {
+        String prompt = String.format("""
+            基于以下信息分析角色的专业领域：
+            
+            角色名称：%s
+            角色描述：%s
+            
+            相关知识库内容：
+            %s
+            
+            请分析角色的专业领域，包括：
+            1. 核心专业技能
+            2. 知识深度
+            3. 实践经验
+            4. 专业认证或资质
+            
+            请列出3-5个具体的专业领域。
+            """, character.getName(), character.getDescription(),
+            chunks.stream().map(DocumentChunk::getContent).limit(8).collect(Collectors.joining("\n")));
+        
+        try {
+            return chatLanguageModel.generate(prompt);
+        } catch (Exception e) {
+            logger.warn("Failed to generate expertise with AI", e);
+            return "基于知识库内容的专业领域";
+        }
+    }
+    
+    /**
+     * 使用AI生成情感模式
+     */
+    private String generateEmotionalPatternsWithAI(Character character, String baseContext, List<DocumentChunk> chunks) {
+        String prompt = String.format("""
+            基于以下信息分析角色的情感模式：
+            
+            角色名称：%s
+            角色描述：%s
+            
+            相关知识库内容：
+            %s
+            
+            请分析角色的情感模式，包括：
+            1. 情感表达方式
+            2. 情绪调节能力
+            3. 情感反应模式
+            4. 情感稳定性
+            
+            请用2-3句话描述角色的情感模式。
+            """, character.getName(), character.getDescription(),
+            chunks.stream().map(DocumentChunk::getContent).limit(6).collect(Collectors.joining("\n")));
+        
+        try {
+            return chatLanguageModel.generate(prompt);
+        } catch (Exception e) {
+            logger.warn("Failed to generate emotional patterns with AI", e);
+            return "情绪稳定，善于倾听，能够感同身受";
+        }
+    }
+    
+    /**
+     * 使用AI生成对话示例
+     */
+    private String generateConversationExamplesWithAI(Character character, String baseContext, List<DocumentChunk> chunks) {
+        String prompt = String.format("""
+            基于以下信息为角色生成对话示例：
+            
+            角色名称：%s
+            角色描述：%s
+            
+            相关知识库内容：
+            %s
+            
+            请生成3-5个对话示例，展示角色的说话风格和特点，包括：
+            1. 问候语
+            2. 回答问题的方式
+            3. 表达观点的方式
+            4. 告别语
+            
+            请以JSON格式输出，包含greeting、question_response、opinion_expression、farewell等字段。
+            """, character.getName(), character.getDescription(),
+            chunks.stream().map(DocumentChunk::getContent).limit(6).collect(Collectors.joining("\n")));
+        
+        try {
+            return chatLanguageModel.generate(prompt);
+        } catch (Exception e) {
+            logger.warn("Failed to generate conversation examples with AI", e);
+            return generateConversationExamples(character, baseContext);
+        }
+    }
+    
+    /**
+     * 使用AI生成限制条件
+     */
+    private String generateRestrictionsWithAI(Character character, String baseContext, List<DocumentChunk> chunks) {
+        String prompt = String.format("""
+            基于以下信息为角色生成行为限制条件：
+            
+            角色名称：%s
+            角色描述：%s
+            
+            相关知识库内容：
+            %s
+            
+            请为角色设定适当的行为限制，包括：
+            1. 不提供的内容类型
+            2. 避免的话题
+            3. 行为边界
+            4. 安全准则
+            
+            请列出3-5条具体的限制条件。
+            """, character.getName(), character.getDescription(),
+            chunks.stream().map(DocumentChunk::getContent).limit(6).collect(Collectors.joining("\n")));
+        
+        try {
+            return chatLanguageModel.generate(prompt);
+        } catch (Exception e) {
+            logger.warn("Failed to generate restrictions with AI", e);
+            return "不提供有害信息，不参与不当讨论，保持角色一致性";
+        }
+    }
+    
+    /**
+     * 使用AI生成目标动机
+     */
+    private String generateGoalsAndMotivationsWithAI(Character character, String baseContext, List<DocumentChunk> chunks) {
+        String prompt = String.format("""
+            基于以下信息分析角色的目标动机：
+            
+            角色名称：%s
+            角色描述：%s
+            
+            相关知识库内容：
+            %s
+            
+            请分析角色的目标动机，包括：
+            1. 主要目标
+            2. 内在动机
+            3. 价值追求
+            4. 人生使命
+            
+            请用2-3句话描述角色的目标动机。
+            """, character.getName(), character.getDescription(),
+            chunks.stream().map(DocumentChunk::getContent).limit(6).collect(Collectors.joining("\n")));
+        
+        try {
+            return chatLanguageModel.generate(prompt);
+        } catch (Exception e) {
+            logger.warn("Failed to generate goals and motivations with AI", e);
+            return "帮助用户获得有价值的信息和见解，提供有意义的对话体验";
+        }
+    }
+    
+    // ==================== 降级方法（原有实现） ====================
     
     private String generateSystemPrompt(Character character, String context) {
         return String.format(
@@ -291,6 +662,12 @@ public class CharacterProfileService {
             CharacterProfile profile = profileOpt.get();
             profile.setStatus(CharacterProfile.ProfileStatus.FAILED);
             profile.setUpdatedAt(LocalDateTime.now());
+            
+            // 确保有有效的system_prompt
+            if (profile.getSystemPrompt() == null || profile.getSystemPrompt().isEmpty()) {
+                profile.setSystemPrompt("角色配置文件生成失败：" + errorMessage);
+            }
+            
             characterProfileRepository.save(profile);
         }
     }
@@ -301,6 +678,37 @@ public class CharacterProfileService {
     public void regenerateProfile(Character character) {
         logger.info("Regenerating profile for character: {}", character.getId());
         generateProfileAsync(character);
+    }
+    
+    /**
+     * 重新生成CharacterGPT格式的系统提示词
+     */
+    public void regenerateCharacterGPTPrompt(Character character) {
+        logger.info("Regenerating CharacterGPT prompt for character: {}", character.getId());
+        
+        try {
+            Optional<CharacterProfile> profileOpt = characterProfileRepository.findByCharacter(character);
+            if (profileOpt.isEmpty()) {
+                logger.warn("Character profile not found for character: {}", character.getId());
+                return;
+            }
+            
+            CharacterProfile profile = profileOpt.get();
+            List<DocumentChunk> relevantChunks = retrieveRelevantContent(character);
+            
+            // 生成新的CharacterGPT格式提示词
+            generateCharacterGPTSystemPrompt(profile, character, relevantChunks);
+            
+            // 更新版本和时间戳
+            profile.setVersion(profile.getVersion() + 1);
+            profile.setUpdatedAt(LocalDateTime.now());
+            
+            characterProfileRepository.save(profile);
+            logger.info("CharacterGPT prompt regenerated successfully for character: {}", character.getId());
+            
+        } catch (Exception e) {
+            logger.error("Failed to regenerate CharacterGPT prompt for character: {}", character.getId(), e);
+        }
     }
     
     /**

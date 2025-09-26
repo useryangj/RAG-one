@@ -55,6 +55,7 @@ public class Document {
     // 多个文档属于一个知识库
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "knowledge_base_id", nullable = false)
+    @JsonIgnore  // 避免序列化懒加载对象
     private KnowledgeBase knowledgeBase;
     
     @Column(name = "created_at", nullable = false)

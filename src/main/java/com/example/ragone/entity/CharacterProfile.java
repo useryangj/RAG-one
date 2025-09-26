@@ -23,7 +23,7 @@ public class CharacterProfile {
     // 一对一关联角色
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "character_id", nullable = false)
-    @JsonIgnore
+    @JsonIgnore  // 避免循环引用
     private Character character;
     
     // 系统提示词 - 角色的核心人设

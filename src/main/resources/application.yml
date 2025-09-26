@@ -3,7 +3,7 @@ spring:
     name: RAG-one
   data:
     redis:
-      host: ${REDIS_HOST:192.168.31.208}
+      host: ${REDIS_HOST:127.0.0.1}
       port: ${REDIS_PORT:6379}
       password: ${REDIS_PASSWORD:}
       database: ${REDIS_DATABASE:0}
@@ -16,7 +16,7 @@ spring:
           max-wait: -1ms
   # 数据库配置
   datasource:
-    url: jdbc:postgresql://${DB_HOST:192.168.31.208}:${DB_PORT:5432}/ragone
+    url: jdbc:postgresql://${DB_HOST:127.0.0.1}:${DB_PORT:5432}/ragone
     username: ${DB_USERNAME:ragone_user}
     password: ${DB_PASSWORD:ragone_password}
     driver-class-name: org.postgresql.Driver
@@ -39,6 +39,14 @@ spring:
       max-file-size: 50MB
       max-request-size: 50MB
       enabled: true
+  
+  # Jackson配置
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
 
 # LangChain4j配置
 langchain4j:
@@ -47,7 +55,7 @@ langchain4j:
       # SiliconFlow API配置
       api-key: ${SILICONFLOW_API_KEY:sk-lccjubwiwtvrfbtubsuqclecnhzalcbckwbpdrielsonkcgw}
       base-url: https://api.siliconflow.cn/v1
-      model-name: ${LLM_MODEL:Qwen/Qwen2.5-7B-Instruct}
+      model-name: ${LLM_MODEL:Qwen/Qwen3-Next-80B-A3B-Instruct}
       temperature: 0.7
       max-tokens: 2000
       timeout: 60s
@@ -72,6 +80,16 @@ app:
   # 向量数据库配置
   vector-store:
     dimension: 1024 # 根据选择的embedding模型调整
+  # 文档处理配置
+  document:
+    # 文档分块配置
+    chunk:
+      # 每块最大字符数（建议400-600，对应约100-150个token）
+      max-chars: ${DOCUMENT_CHUNK_MAX_CHARS:400}
+      # 重叠字符数
+      overlap-chars: ${DOCUMENT_CHUNK_OVERLAP:50}
+      # 最大token数限制（留一些缓冲）
+      max-tokens: ${DOCUMENT_CHUNK_MAX_TOKENS:500}
   # 聊天缓存配置
   chat:
     cache:

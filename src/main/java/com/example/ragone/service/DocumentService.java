@@ -53,6 +53,15 @@ public class DocumentService {
     @Value("${app.file-storage-path}")
     private String fileStoragePath;
     
+    @Value("${app.document.chunk.max-chars:400}")
+    private int maxChunkChars;
+    
+    @Value("${app.document.chunk.overlap-chars:50}")
+    private int overlapChars;
+    
+    @Value("${app.document.chunk.max-tokens:500}")
+    private int maxTokens;
+    
     private final DocumentParser documentParser = new ApacheTikaDocumentParser();
     
     /**
@@ -70,6 +79,9 @@ public class DocumentService {
         
         // 生成唯一文件名
         String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null) {
+            throw new IllegalArgumentException("文件名不能为空");
+        }
         String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
         String uniqueFilename = UUID.randomUUID().toString() + fileExtension;
         Path filePath = storageDir.resolve(uniqueFilename);
@@ -119,18 +131,27 @@ public class DocumentService {
                     Files.newInputStream(Paths.get(document.getFilePath()))
             );
             
-            // 2. 文档分块
+            // 2. 文档分块 - 使用配置参数
             List<TextSegment> segments = DocumentSplitters.recursive(
-                    1000, // 每块最大字符数
-                    200   // 重叠字符数
+                    maxChunkChars,  // 每块最大字符数
+                    overlapChars    // 重叠字符数
             ).split(langchainDoc);
             
             // 3. 为每个分块生成向量并保存
             int position = 0;
             for (TextSegment segment : segments) {
                 try {
+                    String text = segment.text();
+                    
+                    // 检查文本长度，如果过长则跳过
+                    int estimatedTokens = estimateTokenCount(text);
+                    if (estimatedTokens > maxTokens) {
+                        logger.warn("跳过过长的文档片段，估计token数: {}, 文本长度: {}, 限制: {}", estimatedTokens, text.length(), maxTokens);
+                        continue;
+                    }
+                    
                     // 生成向量
-                    Embedding embedding = embeddingModel.embed(segment.text()).content();
+                    Embedding embedding = embeddingModel.embed(text).content();
                     String embeddingString = embeddingToVectorString(embedding);
                     
                     // 使用原生SQL保存文档片段（处理vector类型，包含knowledge_base_id）
@@ -138,15 +159,19 @@ public class DocumentService {
                         document.getId(),
                         document.getKnowledgeBase().getId(), // 冗余存储knowledge_base_id
                         position++,
-                        segment.text(),
-                        calculateContentHash(segment.text()),
-                        segment.text().length() / 4, // 粗略估算token数
+                        text,
+                        calculateContentHash(text),
+                        estimatedTokens, // 使用更准确的token估算
                         embeddingString,
                         LocalDateTime.now()
                     );
                     
                 } catch (Exception e) {
                     logger.error("处理文档片段失败: {}", e.getMessage());
+                    // 如果是token限制错误，记录更详细的信息
+                    if (e.getMessage() != null && e.getMessage().contains("512 tokens")) {
+                        logger.error("文档片段超过512 token限制，文本长度: {}", segment.text().length());
+                    }
                 }
             }
             
@@ -237,6 +262,40 @@ public class DocumentService {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("计算内容哈希失败", e);
         }
+    }
+    
+    /**
+     * 估算文本的token数量
+     * 对于中文文本，通常1个字符约等于1-2个token
+     * 对于英文文本，通常1个单词约等于1个token
+     */
+    private int estimateTokenCount(String text) {
+        if (text == null || text.isEmpty()) {
+            return 0;
+        }
+        
+        // 简单估算：中文字符按1.5个token计算，英文单词按1个token计算
+        int chineseChars = 0;
+        int englishWords = 0;
+        
+        for (char c : text.toCharArray()) {
+            if (c >= 0x4E00 && c <= 0x9FFF) { // 中文字符范围
+                chineseChars++;
+            } else if (Character.isLetter(c)) {
+                // 简单计算英文单词（按空格分割）
+                if (c == ' ') {
+                    englishWords++;
+                }
+            }
+        }
+        
+        // 估算token数：中文字符 * 1.5 + 英文单词数
+        int estimatedTokens = (int) (chineseChars * 1.5) + englishWords + 1;
+        
+        // 如果估算结果太小，使用字符数/2作为备选
+        int fallbackEstimate = text.length() / 2;
+        
+        return Math.max(estimatedTokens, fallbackEstimate);
     }
     
     /**

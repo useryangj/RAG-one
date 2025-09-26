@@ -134,17 +134,34 @@ public class CharacterService {
         logger.info("Activating character ID: {} for user: {}", characterId, user.getUsername());
         
         Character character = getCharacterByIdAndUser(characterId, user);
+        Character.CharacterStatus currentStatus = character.getStatus();
         
-        // 检查角色配置文件是否完成
+        // 1. 检查当前状态是否允许激活
+        if (currentStatus == Character.CharacterStatus.GENERATING) {
+            throw new IllegalStateException("角色人物卡正在生成中，无法激活");
+        }
+        
+        if (currentStatus == Character.CharacterStatus.ACTIVE) {
+            logger.info("Character {} is already active", characterId);
+            return character; // 已经是激活状态，直接返回
+        }
+        
+        // 2. 检查角色配置文件是否完成
         if (!characterProfileService.isProfileCompleted(character)) {
             throw new IllegalStateException("角色配置文件未完成，无法激活");
         }
         
+        // 3. 记录状态转换日志
+        logger.info("Character status transition: {} -> ACTIVE for character ID: {}", 
+                    currentStatus, characterId);
+        
+        // 4. 更新状态
         character.setStatus(Character.CharacterStatus.ACTIVE);
         character.setUpdatedAt(LocalDateTime.now());
         
         Character activatedCharacter = characterRepository.save(character);
-        logger.info("Character activated successfully: {}", activatedCharacter.getId());
+        logger.info("Character activated successfully: {} (from {} to ACTIVE)", 
+                    activatedCharacter.getId(), currentStatus);
         
         return activatedCharacter;
     }
@@ -156,11 +173,34 @@ public class CharacterService {
         logger.info("Deactivating character ID: {} for user: {}", characterId, user.getUsername());
         
         Character character = getCharacterByIdAndUser(characterId, user);
+        Character.CharacterStatus currentStatus = character.getStatus();
+        
+        // 1. 检查当前状态是否允许停用
+        if (currentStatus == Character.CharacterStatus.GENERATING) {
+            throw new IllegalStateException("角色人物卡正在生成中，无法停用");
+        }
+        
+        if (currentStatus == Character.CharacterStatus.INACTIVE) {
+            logger.info("Character {} is already inactive", characterId);
+            return character; // 已经是非激活状态，直接返回
+        }
+        
+        if (currentStatus == Character.CharacterStatus.DRAFT) {
+            logger.info("Character {} is in draft status, cannot deactivate", characterId);
+            throw new IllegalStateException("草稿状态的角色无法停用");
+        }
+        
+        // 2. 记录状态转换日志
+        logger.info("Character status transition: {} -> INACTIVE for character ID: {}", 
+                    currentStatus, characterId);
+        
+        // 3. 更新状态
         character.setStatus(Character.CharacterStatus.INACTIVE);
         character.setUpdatedAt(LocalDateTime.now());
         
         Character deactivatedCharacter = characterRepository.save(character);
-        logger.info("Character deactivated successfully: {}", deactivatedCharacter.getId());
+        logger.info("Character deactivated successfully: {} (from {} to INACTIVE)", 
+                    deactivatedCharacter.getId(), currentStatus);
         
         return deactivatedCharacter;
     }

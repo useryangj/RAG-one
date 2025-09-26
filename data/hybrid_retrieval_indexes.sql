@@ -61,3 +61,5 @@ ON document_chunks (content_hash);
 -- - idx_document_chunks_position: 支持按片段位置排序
 -- - idx_document_chunks_hybrid: 混合检索复合索引
 -- - idx_document_chunks_content_hash: 内容去重索引
+
+

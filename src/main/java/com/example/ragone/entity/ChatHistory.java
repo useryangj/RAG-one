@@ -1,5 +1,6 @@
 package com.example.ragone.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -26,10 +27,12 @@ public class ChatHistory {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore  // 避免序列化懒加载对象
     private User user;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "knowledge_base_id")
+    @JsonIgnore  // 避免序列化懒加载对象
     private KnowledgeBase knowledgeBase;
     
     @Column(name = "user_message", columnDefinition = "TEXT", nullable = false)

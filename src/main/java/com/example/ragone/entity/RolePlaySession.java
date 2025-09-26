@@ -1,6 +1,7 @@
 package com.example.ragone.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -21,12 +22,15 @@ public class RolePlaySession {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore  // 前端不需要数据库主键ID
     private Long id;
     
     @Column(name = "session_id", nullable = false, unique = true)
+    @JsonProperty("sessionId")  // 使用sessionId作为JSON字段名
     private String sessionId;
     
     @Column(name = "session_name")
+    @JsonProperty("name")  // 前端期望的字段名
     private String sessionName;
     
     // 会话所属用户
@@ -38,7 +42,12 @@ public class RolePlaySession {
     // 会话关联的角色
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "character_id", nullable = false)
+    @JsonIgnore  // 避免序列化懒加载对象
     private Character character;
+    
+    // 角色ID（用于前端序列化）
+    @Column(name = "character_id", insertable = false, updatable = false)
+    private Long characterId;
     
     // 会话状态
     @Enumerated(EnumType.STRING)
@@ -55,9 +64,11 @@ public class RolePlaySession {
     private Integer messageCount = 0;
     
     @Column(name = "total_tokens")
+    @JsonProperty("tokenUsage")  // 前端期望的字段名
     private Long totalTokens = 0L;
     
     @Column(name = "last_activity_at")
+    @JsonProperty("lastActiveAt")  // 前端期望的字段名
     private LocalDateTime lastActivityAt;
     
     @Column(name = "created_at", nullable = false)
@@ -131,6 +142,14 @@ public class RolePlaySession {
     
     public void setCharacter(Character character) {
         this.character = character;
+    }
+    
+    public Long getCharacterId() {
+        return characterId;
+    }
+    
+    public void setCharacterId(Long characterId) {
+        this.characterId = characterId;
     }
     
     public SessionStatus getStatus() {

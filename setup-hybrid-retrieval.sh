@@ -44,3 +44,5 @@ echo "  - 重排序: 已启用"
 echo ""
 echo "🔧 如需调整配置，请编辑 src/main/resources/application.yml"
 echo "📖 详细配置说明请参考 README.md"
+
+

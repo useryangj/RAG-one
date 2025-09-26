@@ -43,6 +43,7 @@ public class Character {
     // 角色关联的知识库（用于生成人物卡和对话检索）
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "knowledge_base_id", nullable = false)
+    @JsonIgnore  // 避免序列化懒加载对象和循环引用
     private KnowledgeBase knowledgeBase;
     
     // 角色状态
