@@ -28,7 +28,7 @@ import com.example.ragone.service.CharacterService;
  * 角色管理控制器
  */
 @RestController
-@RequestMapping("/characters")
+@RequestMapping("/api/characters")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class CharacterController {
     

@@ -340,6 +340,8 @@ public class RolePlayService {
         promptBuilder.append("请严格按照上述角色设定进行回复，保持角色一致性。");
         promptBuilder.append("回复应该自然、符合角色特点，不要提及你是AI或角色扮演。");
         promptBuilder.append("直接以角色身份回复，不需要添加角色名称前缀。\n");
+        promptBuilder.append("如果用户的输入信息熵较低，你的回复也简单回答即可。\n");
+
         
         return promptBuilder.toString();
     }
@@ -414,9 +416,13 @@ public class RolePlayService {
      * 获取用户的会话列表
      */
     @Transactional(readOnly = true)
-    public List<RolePlaySession> getUserSessions(User user, int page, int size) {
+    public List<RolePlaySession> getUserSessions(User user, Long characterId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return sessionRepository.findByUserOrderByLastActivityAtDesc(user, pageable).getContent();
+        if (characterId != null) {
+            return sessionRepository.findByUserAndCharacterIdOrderByLastActivityAtDesc(user, characterId, pageable).getContent();
+        } else {
+            return sessionRepository.findByUserOrderByLastActivityAtDesc(user, pageable).getContent();
+        }
     }
     
     /**

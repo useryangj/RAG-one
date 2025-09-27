@@ -55,9 +55,12 @@ public class SecurityConfig {
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/error").permitAll()
+                .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
             );
         
@@ -73,6 +76,7 @@ public class SecurityConfig {
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L); // 预检请求缓存时间
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

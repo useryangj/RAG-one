@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ragone.entity.RolePlayHistory;
@@ -29,7 +31,7 @@ import com.example.ragone.service.RolePlayService;
  * 角色扮演控制器
  */
 @RestController
-@RequestMapping("/roleplay")
+@RequestMapping("/api/roleplay")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class RolePlayController {
 
@@ -48,7 +50,7 @@ public class RolePlayController {
         try {
             Long characterId = Long.valueOf(request.get("characterId").toString());
             // 兼容前端的sessionName字段，如果没有则使用scenario
-            String sessionName = (String) request.getOrDefault("sessionName", 
+                String sessionName = (String) request.getOrDefault("sessionName",
                                  (String) request.get("scenario"));
             
             RolePlaySession session = rolePlayService.createSession(user, characterId, sessionName);
@@ -66,11 +68,17 @@ public class RolePlayController {
     @PostMapping("/message")
     public ResponseEntity<?> sendMessage(@RequestBody Map<String, Object> request,
                                        Authentication authentication) {
+        log.info("=== 收到发送消息请求 ===");
+        log.info("请求体: {}", request);
+        
         User user = (User) authentication.getPrincipal();
+        log.info("用户身份验证: {}", user.getUsername());
         
         try {
             String sessionId = (String) request.get("sessionId");
             String message = (String) request.get("message");
+            
+            log.info("会话ID: {}, 消息: {}", sessionId, message);
             
             RolePlayHistory history = rolePlayService.sendMessage(user, sessionId, message);
             
@@ -116,12 +124,22 @@ public class RolePlayController {
     }
     
     /**
+     * 处理OPTIONS预检请求
+     */
+    @RequestMapping(value = "/sessions", method = RequestMethod.OPTIONS)
+    public ResponseEntity<?> handleOptions() {
+        return ResponseEntity.ok().build();
+    }
+    
+    /**
      * 获取用户的会话列表
      */
     @GetMapping("/sessions")
-    public ResponseEntity<List<RolePlaySession>> getUserSessions(Authentication authentication) {
+    public ResponseEntity<List<RolePlaySession>> getUserSessions(
+            @RequestParam(value = "characterId", required = false) Long characterId,
+            Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        List<RolePlaySession> sessions = rolePlayService.getUserSessions(user, 0, 100);
+        List<RolePlaySession> sessions = rolePlayService.getUserSessions(user, characterId, 0, 100);
         return ResponseEntity.ok(sessions);
     }
     

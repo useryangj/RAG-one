@@ -26,8 +26,23 @@ public class RolePlaySession {
     private Long id;
     
     @Column(name = "session_id", nullable = false, unique = true)
-    @JsonProperty("sessionId")  // 使用sessionId作为JSON字段名
     private String sessionId;
+    
+    // 为了前端兼容性，添加sessionId作为sessionId字段输出，同时添加id的别名
+    @JsonProperty("sessionId")
+    @JsonIgnore  // 防止重复输出
+    public String getSessionId() {
+        return sessionId;
+    }
+    
+    @JsonProperty("id")
+    public String getFrontendId() {
+        return sessionId;
+    }
+    
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
     
     @Column(name = "session_name")
     @JsonProperty("name")  // 前端期望的字段名
@@ -112,13 +127,6 @@ public class RolePlaySession {
         this.id = id;
     }
     
-    public String getSessionId() {
-        return sessionId;
-    }
-    
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
-    }
     
     public String getSessionName() {
         return sessionName;

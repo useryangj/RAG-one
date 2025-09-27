@@ -17,7 +17,7 @@ import java.util.Map;
  * RAG问答控制器
  */
 @RestController
-@RequestMapping("/rag")
+@RequestMapping("/api/rag")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class RagController {
     

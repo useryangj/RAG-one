@@ -17,7 +17,7 @@ import java.util.Map;
  * 文档控制器
  */
 @RestController
-@RequestMapping("/documents")
+@RequestMapping("/api/documents")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class DocumentController {
     

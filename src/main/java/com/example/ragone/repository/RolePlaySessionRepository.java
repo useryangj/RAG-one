@@ -18,7 +18,7 @@ import java.util.Optional;
  * 角色扮演会话Repository接口
  */
 @Repository
-public interface RolePlaySessionRepository extends JpaRepository<RolePlaySession, String> {
+public interface RolePlaySessionRepository extends JpaRepository<RolePlaySession, Long> {
     
     /**
      * 根据用户查找所有会话（分页）
@@ -89,4 +89,10 @@ public interface RolePlaySessionRepository extends JpaRepository<RolePlaySession
      */
     @Query("SELECT rps FROM RolePlaySession rps WHERE rps.character = :character ORDER BY rps.createdAt DESC")
     List<RolePlaySession> findByCharacterOrderByCreatedAtDesc(@Param("character") Character character);
+    
+    /**
+     * 根据用户和角色ID查找会话（分页）
+     */
+    @Query("SELECT rps FROM RolePlaySession rps WHERE rps.user = :user AND rps.characterId = :characterId ORDER BY rps.lastActivityAt DESC")
+    Page<RolePlaySession> findByUserAndCharacterIdOrderByLastActivityAtDesc(@Param("user") User user, @Param("characterId") Long characterId, Pageable pageable);
 }

@@ -14,7 +14,7 @@ import java.util.Map;
  * 音频处理控制器
  */
 @RestController
-@RequestMapping("/audio")
+@RequestMapping("/api/audio")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class AudioController {
     

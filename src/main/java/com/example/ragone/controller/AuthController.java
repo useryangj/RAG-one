@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * 认证控制器
  */
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class AuthController {
     

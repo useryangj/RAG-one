@@ -85,7 +85,7 @@ app:
     # 文档分块配置
     chunk:
       # 每块最大字符数（建议400-600，对应约100-150个token）
-      max-chars: ${DOCUMENT_CHUNK_MAX_CHARS:400}
+      max-chars: ${DOCUMENT_CHUNK_MAX_CHARS:100}
       # 重叠字符数
       overlap-chars: ${DOCUMENT_CHUNK_OVERLAP:50}
       # 最大token数限制（留一些缓冲）
@@ -109,7 +109,7 @@ app:
     # 关键词检索权重
     keyword-weight: 0.3
     # 最大检索结果数量
-    max-results: 10
+    max-results: 5
   
   # 重排序配置
   reranking:
@@ -125,8 +125,6 @@ app:
 # 服务器配置
 server:
   port: 8080
-  servlet:
-    context-path: /api
 
 # 日志配置
 logging:

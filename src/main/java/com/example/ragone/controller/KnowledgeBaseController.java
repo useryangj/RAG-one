@@ -16,7 +16,7 @@ import java.util.Map;
  * 知识库控制器
  */
 @RestController
-@RequestMapping("/knowledge-bases")
+@RequestMapping("/api/knowledge-bases")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class KnowledgeBaseController {
     

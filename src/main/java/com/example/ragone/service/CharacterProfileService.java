@@ -43,7 +43,7 @@ public class CharacterProfileService {
     
     @Autowired
     private ChatLanguageModel chatLanguageModel;
-    
+
     @Autowired
     private CharacterGPTTemplateService characterGPTTemplateService;
     
@@ -102,7 +102,7 @@ public class CharacterProfileService {
             generateProfileContent(profile, character, relevantChunks);
             
             // 生成CharacterGPT格式的系统提示词
-            generateCharacterGPTSystemPrompt(profile, character, relevantChunks);
+            //generateCharacterGPTSystemPrompt(profile, character, relevantChunks);
             
             // 标记为完成
             profile.setStatus(CharacterProfile.ProfileStatus.COMPLETED);
@@ -294,7 +294,7 @@ public class CharacterProfileService {
             3. 设定角色的行为准则和限制
             4. 提供角色扮演的指导原则
             
-            请直接输出系统提示词，不要包含其他解释。
+            请直接输出系统提示词，不要包含其他解释，内容需精简。
             """, character.getName(), character.getDescription(), 
             chunks.stream().map(DocumentChunk::getContent).limit(5).collect(Collectors.joining("\n")));
         
@@ -326,7 +326,7 @@ public class CharacterProfileService {
             4. 专业技能和知识来源
             5. 个人价值观和信念
             
-            背景故事应该与知识库内容保持一致，字数控制在300-500字。
+            背景故事应该与知识库内容保持一致，内容需精简。
             """, character.getName(), character.getDescription(),
             chunks.stream().map(DocumentChunk::getContent).limit(8).collect(Collectors.joining("\n")));
         
@@ -357,7 +357,7 @@ public class CharacterProfileService {
             3. 情感表达方式
             4. 社交风格
             
-            请以简洁的列表形式输出，每个特征用一句话描述。
+            请以简洁的列表形式输出，每个特征用一句话描述，内容需精简。
             """, character.getName(), character.getDescription(),
             chunks.stream().map(DocumentChunk::getContent).limit(6).collect(Collectors.joining("\n")));
         
@@ -388,7 +388,7 @@ public class CharacterProfileService {
             3. 情感色彩
             4. 专业术语使用习惯
             
-            请用2-3句话描述角色的说话风格。
+            请用2-3句话描述角色的说话风格，内容需精简。
             """, character.getName(), character.getDescription(),
             chunks.stream().map(DocumentChunk::getContent).limit(6).collect(Collectors.joining("\n")));
         
@@ -419,7 +419,7 @@ public class CharacterProfileService {
             3. 学习偏好
             4. 娱乐方式
             
-            请列出3-5个具体的兴趣爱好。
+            请列出3-5个具体的兴趣爱好，内容需精简。
             """, character.getName(), character.getDescription(),
             chunks.stream().map(DocumentChunk::getContent).limit(6).collect(Collectors.joining("\n")));
         
@@ -450,7 +450,7 @@ public class CharacterProfileService {
             3. 实践经验
             4. 专业认证或资质
             
-            请列出3-5个具体的专业领域。
+            请列出3-5个具体的专业领域，内容需精简。
             """, character.getName(), character.getDescription(),
             chunks.stream().map(DocumentChunk::getContent).limit(8).collect(Collectors.joining("\n")));
         
@@ -481,7 +481,7 @@ public class CharacterProfileService {
             3. 情感反应模式
             4. 情感稳定性
             
-            请用2-3句话描述角色的情感模式。
+            请用2-3句话描述角色的情感模式，内容需精简。
             """, character.getName(), character.getDescription(),
             chunks.stream().map(DocumentChunk::getContent).limit(6).collect(Collectors.joining("\n")));
         
@@ -543,7 +543,7 @@ public class CharacterProfileService {
             3. 行为边界
             4. 安全准则
             
-            请列出3-5条具体的限制条件。
+            请列出3-5条具体的限制条件，内容需精简。
             """, character.getName(), character.getDescription(),
             chunks.stream().map(DocumentChunk::getContent).limit(6).collect(Collectors.joining("\n")));
         
@@ -574,7 +574,7 @@ public class CharacterProfileService {
             3. 价值追求
             4. 人生使命
             
-            请用2-3句话描述角色的目标动机。
+            请用2-3句话描述角色的目标动机，内容需精简。
             """, character.getName(), character.getDescription(),
             chunks.stream().map(DocumentChunk::getContent).limit(6).collect(Collectors.joining("\n")));
         

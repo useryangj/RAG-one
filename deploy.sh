@@ -1,17 +1,11 @@
 #!/bin/bash
 
-# RAG-one 项目部署脚本
-# 使用方法: ./deploy.sh [环境] [操作]
-# 环境: dev|prod
-# 操作: build|up|down|restart|logs
+# RAG-one 部署脚本
+# 使用方法: ./deploy.sh [dev|prod]
 
 set -e
 
-# 默认参数
-ENVIRONMENT=${1:-prod}
-ACTION=${2:-up}
-
-# 颜色输出
+# 颜色定义
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -35,40 +29,34 @@ log_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# 检查 Docker 和 Docker Compose
-check_docker() {
+# 检查环境
+check_environment() {
+    log_info "检查部署环境..."
+    
+    # 检查 Docker
     if ! command -v docker &> /dev/null; then
         log_error "Docker 未安装，请先安装 Docker"
         exit 1
     fi
     
+    # 检查 Docker Compose
     if ! command -v docker-compose &> /dev/null; then
         log_error "Docker Compose 未安装，请先安装 Docker Compose"
         exit 1
     fi
     
-    log_success "Docker 环境检查通过"
-}
-
-# 检查环境变量文件
-check_env_file() {
-    if [ ! -f ".env" ]; then
-        if [ -f "env.example" ]; then
-            log_warning ".env 文件不存在，正在从 env.example 创建..."
-            cp env.example .env
-            log_warning "请编辑 .env 文件，设置正确的环境变量"
-            exit 1
-        else
-            log_error ".env 文件和 env.example 文件都不存在"
-            exit 1
-        fi
+    # 检查环境文件
+    if [ ! -f "env.production" ]; then
+        log_warning "未找到 env.production 文件，将使用默认配置"
+        cp env.example env.production
     fi
-    log_success "环境变量文件检查通过"
+    
+    log_success "环境检查完成"
 }
 
 # 构建镜像
 build_images() {
-    log_info "开始构建 Docker 镜像..."
+    log_info "构建 Docker 镜像..."
     
     # 构建后端镜像
     log_info "构建后端镜像..."
@@ -76,24 +64,117 @@ build_images() {
     
     # 构建前端镜像
     log_info "构建前端镜像..."
-    cd frontend
-    docker build -t ragone-frontend:latest .
-    cd ..
+    docker build -f frontend/Dockerfile -t ragone-frontend:latest ./frontend
     
-    log_success "Docker 镜像构建完成"
+    log_success "镜像构建完成"
 }
 
 # 启动服务
 start_services() {
-    log_info "启动服务..."
-    docker-compose --env-file .env up -d
+    local env=$1
     
-    # 等待服务启动
-    log_info "等待服务启动..."
-    sleep 30
+    log_info "启动服务 (环境: $env)..."
     
-    # 检查服务状态
-    check_services_health
+    if [ "$env" = "prod" ]; then
+        # 生产环境
+        docker-compose --env-file env.production up -d
+    else
+        # 开发环境
+        docker-compose up -d
+    fi
+    
+    log_success "服务启动完成"
+}
+
+# 等待服务就绪
+wait_for_services() {
+    log_info "等待服务就绪..."
+    
+    # 等待数据库
+    log_info "等待 PostgreSQL 启动..."
+    timeout=60
+    while [ $timeout -gt 0 ]; do
+        if docker-compose exec -T postgres pg_isready -U ragone_user -d ragone &> /dev/null; then
+            break
+        fi
+        sleep 2
+        timeout=$((timeout - 2))
+    done
+    
+    if [ $timeout -le 0 ]; then
+        log_error "PostgreSQL 启动超时"
+        exit 1
+    fi
+    
+    # 等待 Redis
+    log_info "等待 Redis 启动..."
+    timeout=30
+    while [ $timeout -gt 0 ]; do
+        if docker-compose exec -T redis redis-cli ping &> /dev/null; then
+            break
+        fi
+        sleep 2
+        timeout=$((timeout - 2))
+    done
+    
+    if [ $timeout -le 0 ]; then
+        log_error "Redis 启动超时"
+        exit 1
+    fi
+    
+    # 等待后端服务
+    log_info "等待后端服务启动..."
+    timeout=120
+    while [ $timeout -gt 0 ]; do
+        if curl -f http://localhost:8080/actuator/health &> /dev/null; then
+            break
+        fi
+        sleep 5
+        timeout=$((timeout - 5))
+    done
+    
+    if [ $timeout -le 0 ]; then
+        log_error "后端服务启动超时"
+        exit 1
+    fi
+    
+    # 等待前端服务
+    log_info "等待前端服务启动..."
+    timeout=60
+    while [ $timeout -gt 0 ]; do
+        if curl -f http://localhost/health &> /dev/null; then
+            break
+        fi
+        sleep 5
+        timeout=$((timeout - 5))
+    done
+    
+    if [ $timeout -le 0 ]; then
+        log_error "前端服务启动超时"
+        exit 1
+    fi
+    
+    log_success "所有服务已就绪"
+}
+
+# 显示服务状态
+show_status() {
+    log_info "服务状态:"
+    docker-compose ps
+    
+    echo ""
+    log_info "访问地址:"
+    echo "  前端: http://localhost"
+    echo "  后端 API: http://localhost:8080/api"
+    echo "  健康检查: http://localhost:8080/actuator/health"
+    
+    echo ""
+    log_info "日志查看:"
+    echo "  所有服务: docker-compose logs -f"
+    echo "  后端服务: docker-compose logs -f backend"
+    echo "  前端服务: docker-compose logs -f frontend"
+    echo "  数据库: docker-compose logs -f postgres"
+    echo "  Redis: docker-compose logs -f redis"
 }
 
 # 停止服务
@@ -103,152 +184,51 @@ stop_services() {
     log_success "服务已停止"
 }
 
-# 重启服务
-restart_services() {
-    log_info "重启服务..."
-    docker-compose restart
-    sleep 30
-    check_services_health
-}
-
-# 查看日志
-show_logs() {
-    docker-compose logs -f
-}
-
-# 检查服务健康状态
-check_services_health() {
-    log_info "检查服务健康状态..."
-    
-    # 检查数据库
-    if docker-compose exec postgres pg_isready -U ragone_user -d ragone > /dev/null 2>&1; then
-        log_success "PostgreSQL 数据库运行正常"
-    else
-        log_error "PostgreSQL 数据库连接失败"
-    fi
-    
-    # 检查 Redis
-    if docker-compose exec redis redis-cli ping > /dev/null 2>&1; then
-        log_success "Redis 缓存运行正常"
-    else
-        log_error "Redis 缓存连接失败"
-    fi
-    
-    # 检查后端服务
-    if curl -f http://localhost:8080/api/actuator/health > /dev/null 2>&1; then
-        log_success "后端服务运行正常"
-    else
-        log_warning "后端服务可能还在启动中，请稍后检查"
-    fi
-    
-    # 检查前端服务
-    if curl -f http://localhost/health > /dev/null 2>&1; then
-        log_success "前端服务运行正常"
-    else
-        log_warning "前端服务可能还在启动中，请稍后检查"
-    fi
-}
-
 # 清理资源
 cleanup() {
-    log_info "清理 Docker 资源..."
+    log_info "清理资源..."
     docker-compose down -v --remove-orphans
     docker system prune -f
-    log_success "清理完成"
-}
-
-# 备份数据
-backup_data() {
-    log_info "备份数据..."
-    
-    # 创建备份目录
-    BACKUP_DIR="backups/$(date +%Y%m%d_%H%M%S)"
-    mkdir -p "$BACKUP_DIR"
-    
-    # 备份数据库
-    docker-compose exec postgres pg_dump -U ragone_user ragone > "$BACKUP_DIR/database.sql"
-    
-    # 备份上传的文件
-    docker cp ragone-backend:/app/uploads "$BACKUP_DIR/"
-    
-    log_success "数据备份完成: $BACKUP_DIR"
-}
-
-# 显示帮助信息
-show_help() {
-    echo "RAG-one 项目部署脚本"
-    echo ""
-    echo "使用方法:"
-    echo "  $0 [环境] [操作]"
-    echo ""
-    echo "环境:"
-    echo "  dev     开发环境"
-    echo "  prod    生产环境 (默认)"
-    echo ""
-    echo "操作:"
-    echo "  build     构建 Docker 镜像"
-    echo "  up        启动服务 (默认)"
-    echo "  down      停止服务"
-    echo "  restart   重启服务"
-    echo "  logs      查看日志"
-    echo "  health    检查服务健康状态"
-    echo "  cleanup   清理 Docker 资源"
-    echo "  backup    备份数据"
-    echo "  help      显示帮助信息"
-    echo ""
-    echo "示例:"
-    echo "  $0 prod build    # 构建生产环境镜像"
-    echo "  $0 prod up       # 启动生产环境服务"
-    echo "  $0 prod logs     # 查看生产环境日志"
+    log_success "资源清理完成"
 }
 
 # 主函数
 main() {
-    case $ACTION in
-        "build")
-            check_docker
-            check_env_file
+    local env=${1:-dev}
+    
+    case $env in
+        "dev"|"development")
+            log_info "开始开发环境部署..."
+            check_environment
             build_images
+            start_services "dev"
+            wait_for_services
+            show_status
             ;;
-        "up")
-            check_docker
-            check_env_file
-            start_services
+        "prod"|"production")
+            log_info "开始生产环境部署..."
+            check_environment
+            build_images
+            start_services "prod"
+            wait_for_services
+            show_status
             ;;
-        "down")
-            check_docker
+        "stop")
             stop_services
             ;;
-        "restart")
-            check_docker
-            restart_services
-            ;;
-        "logs")
-            check_docker
-            show_logs
-            ;;
-        "health")
-            check_services_health
-            ;;
         "cleanup")
-            check_docker
             cleanup
             ;;
-        "backup")
-            check_docker
-            backup_data
-            ;;
-        "help")
-            show_help
-            ;;
         *)
-            log_error "未知操作: $ACTION"
-            show_help
+            echo "使用方法: $0 [dev|prod|stop|cleanup]"
+            echo "  dev     - 开发环境部署"
+            echo "  prod    - 生产环境部署"
+            echo "  stop    - 停止服务"
+            echo "  cleanup - 清理资源"
             exit 1
             ;;
     esac
 }
 
 # 执行主函数
-main
-
+main "$@"
