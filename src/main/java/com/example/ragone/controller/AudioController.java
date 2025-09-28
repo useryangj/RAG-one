@@ -28,7 +28,15 @@ public class AudioController {
     public ResponseEntity<?> speechToText(@RequestParam("audio") MultipartFile audioFile,
                                         @RequestParam(value = "language", defaultValue = "zh") String language) {
         try {
-            if (audioFile.isEmpty()) {
+            // 添加详细的调试信息
+            System.out.println("收到语音转文本请求:");
+            System.out.println("- 文件名: " + (audioFile != null ? audioFile.getOriginalFilename() : "null"));
+            System.out.println("- 文件大小: " + (audioFile != null ? audioFile.getSize() : "null"));
+            System.out.println("- 内容类型: " + (audioFile != null ? audioFile.getContentType() : "null"));
+            System.out.println("- 是否为空: " + (audioFile != null ? audioFile.isEmpty() : "audioFile is null"));
+            System.out.println("- 语言: " + language);
+            
+            if (audioFile == null || audioFile.isEmpty()) {
                 Map<String, Object> errorResponse = new HashMap<>();
                 errorResponse.put("success", false);
                 errorResponse.put("message", "音频文件不能为空");

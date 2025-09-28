@@ -1,0 +1,113 @@
+services:
+  # 一体化应用容器（前端+后端）
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.fullstack
+      args:
+        REACT_APP_API_BASE_URL: ${REACT_APP_API_BASE_URL:-http://localhost:8080/api}
+    container_name: ragone-app
+    environment:
+      # 数据库配置
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: ragone_user
+      DB_PASSWORD: ${DB_PASSWORD:-ragone_password}
+      DB_NAME: ragone
+      
+      # Redis 配置
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+      REDIS_DATABASE: 0
+      
+      # JWT 配置
+      JWT_SECRET: ${JWT_SECRET:-mySecretKey123456789012345678901234567890}
+      
+      # AI 模型配置
+      SILICONFLOW_API_KEY: ${SILICONFLOW_API_KEY:-sk-lccjubwiwtvrfbtubsuqclecnhzalcbckwbpdrielsonkcgw}
+      LLM_MODEL: ${LLM_MODEL:-Qwen/Qwen3-Next-80B-A3B-Instruct}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-BAAI/bge-large-zh-v1.5}
+      
+      # 文件存储
+      FILE_STORAGE_PATH: /app/uploads
+      
+      # 服务器配置
+      SERVER_PORT: 8080
+      
+      # 文档处理配置
+      DOCUMENT_CHUNK_MAX_CHARS: ${DOCUMENT_CHUNK_MAX_CHARS:-100}
+      DOCUMENT_CHUNK_OVERLAP: ${DOCUMENT_CHUNK_OVERLAP:-50}
+      DOCUMENT_CHUNK_MAX_TOKENS: ${DOCUMENT_CHUNK_MAX_TOKENS:-500}
+    volumes:
+      - uploads_data:/app/uploads
+      - logs_data:/app/logs
+    ports:
+      - "8080:80"
+    networks:
+      - ragone-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # PostgreSQL 数据库
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: ragone-postgres
+    environment:
+      POSTGRES_DB: ragone
+      POSTGRES_USER: ragone_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-ragone_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./data:/docker-entrypoint-initdb.d
+    ports:
+      - "5433:5432"
+    networks:
+      - ragone-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ragone_user -d ragone"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis 缓存
+  redis:
+    image: redis:7-alpine
+    container_name: ragone-redis
+    command: ${REDIS_PASSWORD:+redis-server --requirepass ${REDIS_PASSWORD}}
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6380:6379"
+    networks:
+      - ragone-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  uploads_data:
+    driver: local
+  logs_data:
+    driver: local
+
+networks:
+  ragone-network:
+    driver: bridge

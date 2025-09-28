@@ -1,5 +1,29 @@
-# 多阶段构建
-FROM maven:3.9-openjdk-17-slim AS builder
+# ===================
+#  构建阶段 (Stage 1)
+# ===================
+FROM ubuntu:22.04 AS builder
+
+# 安装Java 17和Maven
+RUN apt-get update && apt-get install -y \
+    openjdk-17-jdk \
+    maven \
+    && rm -rf /var/lib/apt/lists/*
+
+# 配置Maven使用阿里云镜像源
+RUN mkdir -p /root/.m2 && \
+    echo '<?xml version="1.0" encoding="UTF-8"?>' > /root/.m2/settings.xml && \
+    echo '<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"' >> /root/.m2/settings.xml && \
+    echo '          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' >> /root/.m2/settings.xml && \
+    echo '          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">' >> /root/.m2/settings.xml && \
+    echo '  <mirrors>' >> /root/.m2/settings.xml && \
+    echo '    <mirror>' >> /root/.m2/settings.xml && \
+    echo '      <id>aliyunmaven</id>' >> /root/.m2/settings.xml && \
+    echo '      <mirrorOf>*</mirrorOf>' >> /root/.m2/settings.xml && \
+    echo '      <name>阿里云公共仓库</name>' >> /root/.m2/settings.xml && \
+    echo '      <url>https://maven.aliyun.com/repository/public</url>' >> /root/.m2/settings.xml && \
+    echo '    </mirror>' >> /root/.m2/settings.xml && \
+    echo '  </mirrors>' >> /root/.m2/settings.xml && \
+    echo '</settings>' >> /root/.m2/settings.xml
 
 # 设置工作目录
 WORKDIR /app
@@ -14,36 +38,40 @@ COPY src ./src
 # 构建应用
 RUN mvn clean package -DskipTests
 
-# 运行阶段
-FROM openjdk:17-jre-slim
+# ===================
+#  运行阶段 (Stage 2)
+# ===================
+FROM ubuntu:22.04
 
-# 安装必要的工具
+# 安装Java 17 JRE和健康检查所需的工具
 RUN apt-get update && apt-get install -y \
+    openjdk-17-jre-headless \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# 创建应用用户
-RUN groupadd -r ragone && useradd -r -g ragone ragone
+# 创建一个专用的、无特权的用户和组
+RUN groupadd -r ragone && useradd --no-log-init -r -g ragone ragone
 
 # 设置工作目录
 WORKDIR /app
 
-# 从构建阶段复制 jar 文件
+# 从构建阶段复制构建好的 jar 文件
 COPY --from=builder /app/target/*.jar app.jar
 
-# 创建必要的目录
+# 创建应用可能需要的目录，并赋予所有权
+# 确保 /app 目录也属于 ragone 用户
 RUN mkdir -p /app/uploads /app/logs && \
     chown -R ragone:ragone /app
 
-# 切换到应用用户
+# 切换到非 root 用户
 USER ragone
 
-# 暴露端口
+# 暴露应用端口
 EXPOSE 8080
 
-# 健康检查
+# 健康检查，检查 Spring Boot Actuator 的 health 端点
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:8080/actuator/health || exit 1
 
-# 启动应用
+# 启动应用的入口点
 ENTRYPOINT ["java", "-jar", "app.jar"]

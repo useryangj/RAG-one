@@ -1,0 +1,150 @@
+# ===================
+#  前端构建阶段 (Stage 1)
+# ===================
+FROM node:18-alpine AS frontend-builder
+
+# 设置工作目录
+WORKDIR /app/frontend
+
+# 复制前端依赖文件
+COPY frontend/package*.json ./
+
+# 安装依赖
+RUN npm ci --only=production
+
+# 复制前端源代码
+COPY frontend/ .
+
+# 构建参数
+ARG REACT_APP_API_BASE_URL=http://localhost:8080/api
+ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
+
+# 构建前端应用
+RUN npm run build
+
+# ===================
+#  后端构建阶段 (Stage 2)
+# ===================
+FROM ubuntu:22.04 AS backend-builder
+
+# 安装Java 17和Maven
+RUN apt-get update && apt-get install -y \
+    openjdk-17-jdk \
+    maven \
+    && rm -rf /var/lib/apt/lists/*
+
+# 配置Maven使用阿里云镜像源
+RUN mkdir -p /root/.m2 && \
+    echo '<?xml version="1.0" encoding="UTF-8"?>' > /root/.m2/settings.xml && \
+    echo '<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"' >> /root/.m2/settings.xml && \
+    echo '          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' >> /root/.m2/settings.xml && \
+    echo '          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">' >> /root/.m2/settings.xml && \
+    echo '  <mirrors>' >> /root/.m2/settings.xml && \
+    echo '    <mirror>' >> /root/.m2/settings.xml && \
+    echo '      <id>aliyunmaven</id>' >> /root/.m2/settings.xml && \
+    echo '      <mirrorOf>*</mirrorOf>' >> /root/.m2/settings.xml && \
+    echo '      <name>阿里云公共仓库</name>' >> /root/.m2/settings.xml && \
+    echo '      <url>https://maven.aliyun.com/repository/public</url>' >> /root/.m2/settings.xml && \
+    echo '    </mirror>' >> /root/.m2/settings.xml && \
+    echo '  </mirrors>' >> /root/.m2/settings.xml && \
+    echo '</settings>' >> /root/.m2/settings.xml
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制后端依赖文件
+COPY pom.xml .
+
+# 下载依赖
+RUN mvn dependency:go-offline -B
+
+# 复制后端源代码
+COPY src ./src
+
+# 构建后端应用
+RUN mvn clean package -DskipTests
+
+# ===================
+#  运行阶段 (Stage 3)
+# ===================
+FROM ubuntu:22.04
+
+# 安装Java 17 JRE和Nginx
+RUN apt-get update && apt-get install -y \
+    openjdk-17-jre-headless \
+    nginx \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# 创建一个专用的、无特权的用户和组
+RUN groupadd -r ragone && useradd --no-log-init -r -g ragone ragone
+
+# 设置工作目录
+WORKDIR /app
+
+# 从构建阶段复制构建好的 jar 文件
+COPY --from=backend-builder /app/target/*.jar app.jar
+
+# 从前端构建阶段复制构建好的前端文件
+COPY --from=frontend-builder /app/frontend/build /var/www/html
+
+# 创建Nginx配置文件
+RUN echo 'server {' > /etc/nginx/sites-available/default && \
+    echo '    listen 80;' >> /etc/nginx/sites-available/default && \
+    echo '    server_name localhost;' >> /etc/nginx/sites-available/default && \
+    echo '    root /var/www/html;' >> /etc/nginx/sites-available/default && \
+    echo '    index index.html;' >> /etc/nginx/sites-available/default && \
+    echo '    ' >> /etc/nginx/sites-available/default && \
+    echo '    # 设置客户端请求体大小限制（100MB）' >> /etc/nginx/sites-available/default && \
+    echo '    client_max_body_size 100M;' >> /etc/nginx/sites-available/default && \
+    echo '    ' >> /etc/nginx/sites-available/default && \
+    echo '    # 前端路由支持' >> /etc/nginx/sites-available/default && \
+    echo '    location / {' >> /etc/nginx/sites-available/default && \
+    echo '        try_files $uri $uri/ /index.html;' >> /etc/nginx/sites-available/default && \
+    echo '    }' >> /etc/nginx/sites-available/default && \
+    echo '    ' >> /etc/nginx/sites-available/default && \
+    echo '    # API代理到后端' >> /etc/nginx/sites-available/default && \
+    echo '    location /api {' >> /etc/nginx/sites-available/default && \
+    echo '        proxy_pass http://localhost:8080;' >> /etc/nginx/sites-available/default && \
+    echo '        proxy_set_header Host $host;' >> /etc/nginx/sites-available/default && \
+    echo '        proxy_set_header X-Real-IP $remote_addr;' >> /etc/nginx/sites-available/default && \
+    echo '        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;' >> /etc/nginx/sites-available/default && \
+    echo '        proxy_set_header X-Forwarded-Proto $scheme;' >> /etc/nginx/sites-available/default && \
+    echo '        # 设置代理请求体大小限制' >> /etc/nginx/sites-available/default && \
+    echo '        proxy_request_buffering off;' >> /etc/nginx/sites-available/default && \
+    echo '        proxy_max_temp_file_size 0;' >> /etc/nginx/sites-available/default && \
+    echo '    }' >> /etc/nginx/sites-available/default && \
+    echo '}' >> /etc/nginx/sites-available/default
+
+# 创建应用可能需要的目录，并赋予所有权
+RUN mkdir -p /app/uploads /app/logs && \
+    chown -R ragone:ragone /app && \
+    chown -R www-data:www-data /var/www/html
+
+# 切换到非 root 用户
+
+# 暴露端口
+EXPOSE 80
+
+# 创建启动脚本
+RUN echo '#!/bin/bash' > /app/start.sh && \
+    echo 'echo "Starting backend application..."' >> /app/start.sh && \
+    echo 'java -jar /app/app.jar &' >> /app/start.sh && \
+    echo 'BACKEND_PID=$!' >> /app/start.sh && \
+    echo 'echo "Backend started with PID: $BACKEND_PID"' >> /app/start.sh && \
+    echo 'echo "Waiting for backend to be ready..."' >> /app/start.sh && \
+    echo 'while ! curl -f http://localhost:8080/actuator/health >/dev/null 2>&1; do' >> /app/start.sh && \
+    echo '    echo "Waiting for backend..."' >> /app/start.sh && \
+    echo '    sleep 2' >> /app/start.sh && \
+    echo 'done' >> /app/start.sh && \
+    echo 'echo "Backend is ready!"' >> /app/start.sh && \
+    echo 'echo "Starting nginx..."' >> /app/start.sh && \
+    echo 'nginx -g "daemon off;"' >> /app/start.sh && \
+    chmod +x /app/start.sh
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost/ || exit 1
+
+# 启动应用的入口点
+CMD ["/app/start.sh"]

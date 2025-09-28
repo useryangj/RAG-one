@@ -40,7 +40,7 @@ check_environment() {
     fi
     
     # 检查 Docker Compose
-    if ! command -v docker-compose &> /dev/null; then
+    if ! command -v docker &> /dev/null || ! docker compose version &> /dev/null; then
         log_error "Docker Compose 未安装，请先安装 Docker Compose"
         exit 1
     fi
@@ -77,10 +77,10 @@ start_services() {
     
     if [ "$env" = "prod" ]; then
         # 生产环境
-        docker-compose --env-file env.production up -d
+        docker compose --env-file env.production up -d
     else
         # 开发环境
-        docker-compose up -d
+        docker compose up -d
     fi
     
     log_success "服务启动完成"
@@ -94,7 +94,7 @@ wait_for_services() {
     log_info "等待 PostgreSQL 启动..."
     timeout=60
     while [ $timeout -gt 0 ]; do
-        if docker-compose exec -T postgres pg_isready -U ragone_user -d ragone &> /dev/null; then
+        if docker compose exec -T postgres pg_isready -U ragone_user -d ragone &> /dev/null; then
             break
         fi
         sleep 2
@@ -110,7 +110,7 @@ wait_for_services() {
     log_info "等待 Redis 启动..."
     timeout=30
     while [ $timeout -gt 0 ]; do
-        if docker-compose exec -T redis redis-cli ping &> /dev/null; then
+        if docker compose exec -T redis redis-cli ping &> /dev/null; then
             break
         fi
         sleep 2
@@ -160,7 +160,7 @@ wait_for_services() {
 # 显示服务状态
 show_status() {
     log_info "服务状态:"
-    docker-compose ps
+    docker compose ps
     
     echo ""
     log_info "访问地址:"
@@ -170,24 +170,24 @@ show_status() {
     
     echo ""
     log_info "日志查看:"
-    echo "  所有服务: docker-compose logs -f"
-    echo "  后端服务: docker-compose logs -f backend"
-    echo "  前端服务: docker-compose logs -f frontend"
-    echo "  数据库: docker-compose logs -f postgres"
-    echo "  Redis: docker-compose logs -f redis"
+    echo "  所有服务: docker compose logs -f"
+    echo "  后端服务: docker compose logs -f backend"
+    echo "  前端服务: docker compose logs -f frontend"
+    echo "  数据库: docker compose logs -f postgres"
+    echo "  Redis: docker compose logs -f redis"
 }
 
 # 停止服务
 stop_services() {
     log_info "停止服务..."
-    docker-compose down
+    docker compose down
     log_success "服务已停止"
 }
 
 # 清理资源
 cleanup() {
     log_info "清理资源..."
-    docker-compose down -v --remove-orphans
+    docker compose down -v --remove-orphans
     docker system prune -f
     log_success "资源清理完成"
 }
